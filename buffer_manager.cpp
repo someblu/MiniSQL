@@ -39,7 +39,7 @@ public:
 	void used_block() {
 		m_being_used=0;
 	}
-
+    //static CBufferManager *m_ptheblocks;
 protected:
 	static CBufferManager *m_ptheblocks;
 
@@ -176,4 +176,16 @@ unsigned int CBufferManager::get_block(short int index_table, string filename, u
 	using_block(mark);
 	return mark;
 }
+/*
+int main(){
+	CBufferManager buffer;
+	buffer.initiate_blocks();
+	string filename = "buffer_test.txt";
+	int block_num = buffer.get_block(TABLE, filename,0);
+	for(char* text = buffer.m_ptheblocks[block_num].m_address; text <buffer.m_ptheblocks[block_num].m_address+BLOCK_SIZE;text++){
+		cout<< *text;
+	}
+	return 0;
+}
+*/
 
