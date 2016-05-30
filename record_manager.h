@@ -13,12 +13,12 @@ class CRecordManager : public CBufferManager
 public:
 	string m_tablename;
 
-	CRecordManager(CString tablename){
+	CRecordManager(string tablename){
 		m_tablename = tablename;
 	}
 	~CRecordManager(){}
 
-	short int SelectRecord(condition *conds, column *cols, unsigned int recordlen, unsigned int recordnum);
+	short int SelectRecord(condition *conds, column *cols, unsigned int recordlen);//,unsigned int recordnum);
 	short int DeleteRecord(condition *conds, unsigned int recordlen, unsigned int recordnum);
 	short int IsValueExists(column *cols, char *value, unsigned int recornum);
 	unsigned int InsertValues(insertvalue *values, unsigned int recordlen);

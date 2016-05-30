@@ -1,7 +1,10 @@
-    
+#define _CRT_SECURE_NO_WARNINGS    
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "buffer_manager.h"
 #include "record_manager.h"
 
 using namespace std;
@@ -113,7 +116,7 @@ short int CRecordManager::ValueCompare(char *value, unsigned int type, unsigned 
 
 }
 
-short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned int recordlen, unsigned int recordnum)
+short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned int recordlen)//, unsigned int recordnum)
 {
 	int *intp;
 	int mapnum, tabnum;				//map文件和tab文件块数
@@ -150,7 +153,7 @@ short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned 
 	{
 		int remain = tempcol -> collength - strlen(tempcol -> colname);
 		cout<<tempcol -> colname;
-		for(; remain ; remain --)
+		for(; remain>0 ; remain --)
 			cout<<" ";                  //为每一列的实际数据预留空间，打印时能够对齐
 		tempcol = tempcol -> next;
 	}
@@ -165,8 +168,8 @@ short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned 
 			{	
 				tempcond = conds;
 				conform = 1;
-				if(!tempcond)   //如果没有筛选条件，直接开始逐条打印
-					goto print;
+				//if(!tempcond)   //如果没有筛选条件，直接开始逐条打印
+				//	goto print;
 				while(tempcond)
 				{
 					strcpy(value, m_ptheblocks[tabblocknum].m_address + taboffset * recordlen + tempcond -> attroffset);
@@ -186,7 +189,7 @@ short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned 
 						strcpy(value, m_ptheblocks[tabblocknum].m_address + taboffset * recordlen + tempcol -> coloffset);
 						remain = tempcol -> collength - strlen(value);
 						cout<<value;
-						for(; remain ; remain --)
+						for(; remain>0 ; remain --)
 							cout<<" ";
 						tempcol = tempcol -> next;
 					}
@@ -255,8 +258,8 @@ short int CRecordManager::DeleteRecord(condition *conds, unsigned int recordlen,
 			{	
 				tempcond = conds;
 				conform = 1;
-				if(!tempcond) //如果没有条件，直接逐条删除
-					goto todelete;
+				//if(!tempcond) //如果没有条件，直接逐条删除
+				//	goto todelete;
 				while(tempcond)
 				{
 					strcpy(value, m_ptheblocks[tabblocknum].m_address + taboffset * recordlen + tempcond -> attroffset);
@@ -348,6 +351,8 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 		
   	tab_block_num=get_block(TABLE,tablefilename,0);
 	intp=(int*)m_ptheblocks[tab_block_num].m_address;
+	if (*m_ptheblocks[tab_block_num].m_address =='$')
+		*intp = 1;
 	tab_total_block=*intp;//获得table文件的总块数
 	m_ptheblocks[tab_block_num].used_block();
 	//
@@ -359,6 +364,8 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 	} 
 	*/
 	intp=(int*)m_ptheblocks[map_block_num].m_address;
+	if (*m_ptheblocks[map_block_num].m_address == '$')
+		*intp = 1;
     map_total_block=*intp;//读出当前MAP共有几个块，
 	if(map_total_block==1)//如果只有第0块，说明之前不存在任何记录
 	{
@@ -367,7 +374,7 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 		m_ptheblocks[map_block_num].written_block();
 		m_ptheblocks[map_block_num].used_block();  //第0块已被修改
 		map_block_num=get_blank_block(MAP);
-		m_ptheblocks[map_block_num].mark_block(mapfilename,1)
+		m_ptheblocks[map_block_num].mark_block(mapfilename,1);
 		p=m_ptheblocks[map_block_num].m_address;
 
 		*p='1';//从BLOCK头放起
@@ -426,7 +433,7 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 		}
 		if(!map_space){//若到这里表示所有的MAP已经都满了
 	        map_block_num=get_blank_block(MAP);
-			m_ptheblocks[map_block_num].mark_block(mapfilename,map_total_block) 
+			m_ptheblocks[map_block_num].mark_block(mapfilename,map_total_block); 
 			p=m_ptheblocks[map_block_num].m_address;
 
 			temp=p;
@@ -479,3 +486,45 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 	}
 	return 0;
 }
+/*只测试了增加记录和查找记录功能
+int main(){
+	
+	CRecordManager A("student");
+	CBufferManager::initiate_blocks();
+	insertvalue a1,a2,b1,b2;
+     //insert values(10��'amy')and(12��'john') into table student
+	strcpy(a1.value,"10");
+	strcpy(a2.value,"amy");
+	strcpy(b1.value,"12");
+	strcpy(b2.value,"john");
+	a1.type=INT;
+	a2.type=CHAR;
+	b1.type=INT;
+	b2.type=CHAR;
+	a1.length=3;
+	a2.length=5;
+	b1.length=3;
+	b2.length=5;
+	a1.next = &a2;
+	a2.next = NULL;
+	b1.next = &b2;
+	b2.next = NULL;	
+	//print record number 
+	cout<<A.InsertValues(&a1,8)<<endl;
+	cout<<A.InsertValues(&b1,8)<<endl;
+	column std_id,name;
+	strcpy(std_id.colname,"std_id");
+	strcpy(name.colname,"name");
+	std_id.type = INT;
+	name.type = CHAR;
+	std_id.coloffset=0;
+	std_id.collength=3;
+	name.coloffset=3;
+	name.collength =5;
+	std_id.next = &name;
+	name.next = NULL;
+	A.SelectRecord(NULL,&std_id,8);
+	
+	return 0;
+}
+*/
