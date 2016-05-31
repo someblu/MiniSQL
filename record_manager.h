@@ -3,8 +3,6 @@
 
 #include "MiniSQL.h"
 #include "buffer_manager.h"
-#include <string>
-#include <iostream>
 
 using namespace std;
 

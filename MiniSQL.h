@@ -1,21 +1,29 @@
-#if !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)
-#define AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_
+//#if !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)
+//#define AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+//#if _MSC_VER > 1000
+//#pragma once
+//#endif // _MSC_VER > 1000
 
 //#include "resource.h"
 
+#define _CRT_SECURE_NO_WARNINGS    
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 //Macro definitions
 //Buffer Manager
-#define TABLE 1					//用来标记块中存的是table数据
-#define INDEX 2					//用来标记块中存的是index数据
-#define MAP 3					//用来标记块中存的是map数据
+#define TABLE 1					//锟斤拷锟斤拷锟斤拷锟角匡拷锟叫达拷锟斤拷锟斤拷table锟斤拷锟斤拷
+#define INDEX 2					//锟斤拷锟斤拷锟斤拷锟角匡拷锟叫达拷锟斤拷锟斤拷index锟斤拷锟斤拷
+#define MAP 3					//锟斤拷锟斤拷锟斤拷锟角匡拷锟叫达拷锟斤拷锟斤拷map锟斤拷锟斤拷
 
-#define MAX_BLOCKS 1024		//buffer区内总块数
-#define BLOCK_SIZE 8192			//每块的字节数
-#define NAME_SIZE  100			//文件名的大小
+#define MAX_BLOCKS 1024		//buffer锟斤拷锟斤拷锟杰匡拷锟斤拷
+#define BLOCK_SIZE 8192			//每锟斤拷锟斤拷锟街斤拷锟斤拷
+#define NAME_SIZE  100			//锟侥硷拷锟斤拷锟侥达拷小
 //Buffer Manager
 
 //Index Manager
@@ -72,37 +80,37 @@
 #define FLOATLEN	20
 #define NAMELEN		100
 
-//对应表格中的一列，即一个属性
+//锟斤拷应锟斤拷锟斤拷锟叫碉拷一锟叫ｏ拷锟斤拷一锟斤拷锟斤拷锟斤拷
 typedef struct struct_column
 {
-	char colname[NAMELEN];		//属性名
-	short int type;				//属性的类型，INT,CHAR或FLOAT
-	unsigned int coloffset;		//属性在一条记录中的offset,以字节为单位
-	unsigned int collength;		//属性的长度，以字节为单位
-	struct struct_column *next;			//下一属性，在建索引命令中为NULL
-	short int IsPrimary;		//该属性是否为primary key
-	short int IsUnique;			//该属性书否为unique
+	char colname[NAMELEN];		//锟斤拷锟斤拷锟斤拷
+	short int type;				//锟斤拷锟皆碉拷锟斤拷锟酵ｏ拷INT,CHAR锟斤拷FLOAT
+	unsigned int coloffset;		//锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷录锟叫碉拷offset,锟斤拷锟街斤拷为锟斤拷位
+	unsigned int collength;		//锟斤拷锟皆的筹拷锟饺ｏ拷锟斤拷锟街斤拷为锟斤拷位
+	struct struct_column *next;			//锟斤拷一锟斤拷锟皆ｏ拷锟节斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷为NULL
+	short int IsPrimary;		//锟斤拷锟斤拷锟斤拷锟角凤拷为primary key
+	short int IsUnique;			//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷为unique
 }column;
 
-//对应where语句中的一项,即一个条件
+//锟斤拷应where锟斤拷锟斤拷锟叫碉拷一锟斤拷,锟斤拷一锟斤拷锟斤拷锟斤拷
 typedef struct struct_condition
 {
-	char attrname[NAMELEN];		//属性名
-	unsigned int cond;			//比较条件,LT,GT,QU,NE,LE,GE中一种
-	char value[255];			//参加比较的常数
-	short int type;				//该属性的类型,这是必要的,因为数字和字符串比较方法不一样
-	unsigned int attroffset;	//属性在一条记录中的offset,以字节为单位
-	unsigned int attrlength;	//属性的长度，以字节为单位
-	struct struct_condition *next;		//下一个条件
+	char attrname[NAMELEN];		//锟斤拷锟斤拷锟斤拷
+	unsigned int cond;			//锟饺斤拷锟斤拷锟斤拷,LT,GT,QU,NE,LE,GE锟斤拷一锟斤拷
+	char value[255];			//锟轿加比较的筹拷锟斤拷
+	short int type;				//锟斤拷锟斤拷锟皆碉拷锟斤拷锟斤拷,锟斤拷锟角憋拷要锟斤拷,锟斤拷为锟斤拷锟街猴拷锟街凤拷锟斤拷锟饺较凤拷锟斤拷锟斤拷一锟斤拷
+	unsigned int attroffset;	//锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷录锟叫碉拷offset,锟斤拷锟街斤拷为锟斤拷位
+	unsigned int attrlength;	//锟斤拷锟皆的筹拷锟饺ｏ拷锟斤拷锟街斤拷为锟斤拷位
+	struct struct_condition *next;		//锟斤拷一锟斤拷锟斤拷锟斤拷
 }condition;	
 
-//对应insert into语句中的一个插入项(不是一条记录!!)
+//锟斤拷应insert into锟斤拷锟斤拷锟叫碉拷一锟斤拷锟斤拷锟斤拷锟斤拷(锟斤拷锟斤拷一锟斤拷锟斤拷录!!)
 typedef struct struct_insertvalue
 {
-	char value[VALLEN];			//插入的值
-	short int type;				//插入的值类型,在interpret这一步只能做到判断CHAR或NOTCHAR
-	unsigned int length;		//值长度
-	struct struct_insertvalue *next;	//下一个值
+	char value[VALLEN];			//锟斤拷锟斤拷锟斤拷值
+	short int type;				//锟斤拷锟斤拷锟斤拷值锟斤拷锟斤拷,锟斤拷interpret锟斤拷一锟斤拷只锟斤拷锟斤拷锟斤拷锟叫讹拷CHAR锟斤拷NOTCHAR
+	unsigned int length;		//值锟斤拷锟斤拷
+	struct struct_insertvalue *next;	//锟斤拷一锟斤拷值
 }insertvalue;
 
-#endif // !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)
+//#endif // !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)

@@ -1,9 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS    
-#include <string>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "buffer_manager.h"
 #include "record_manager.h"
 

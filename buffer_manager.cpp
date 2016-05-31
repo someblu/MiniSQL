@@ -1,17 +1,9 @@
-#include <iostream> 
-#include <string>
-#include <fstream>
-#include "buffer_manager.h" 
+#include "buffer_manager.h"
 
 using namespace std;
 
-
-
-
-
 //CBufferManager m_ptheblocks[MAX_BLOCKS];
 CBufferManager* CBufferManager::m_ptheblocks = NULL;
-
 
 /*初始化buffer区，但不分配内存*/
 void CBufferManager::initiate_blocks()
@@ -29,7 +21,7 @@ void CBufferManager::initiate_blocks()
 /*退出时调用，将所有需要写回的块数据写回相应文件，并释放buffer区*/
 void CBufferManager::flush_all_blocks(){   
 	for(int i=0;i<MAX_BLOCKS;i++){
-		m_ptheblocks[i].flush_block();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+		m_ptheblocks[i].flush_block();
 		if(m_ptheblocks[i].m_address != NULL)
 			delete [] m_ptheblocks[i].m_address;
 	}
