@@ -174,7 +174,7 @@ short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned 
 					tempcond = tempcond -> next;
 				}
 				//符合条件，开始打印
-				print:
+
 				if(conform)
 				{
 					tempcol = cols;
@@ -209,7 +209,7 @@ short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned 
 } 
 
 
-short int CRecordManager::DeleteRecord(condition *conds, unsigned int recordlen,unsigned int recordnum)
+short int CRecordManager::DeleteRecord(condition *conds, unsigned int recordlen)
 {
 	int *intp;
 	int mapnum, tabnum;				//map文件和tab文件块数
@@ -264,7 +264,7 @@ short int CRecordManager::DeleteRecord(condition *conds, unsigned int recordlen,
 					tempcond = tempcond -> next;
 				}
 				//符合条件，开始删
-				todelete:
+
 				if(conform)
 				{
 					*(m_ptheblocks[mapblocknum].m_address + mapoffset) ='$';
@@ -482,7 +482,7 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 	}
 	return 0;
 }
-/*只测试了增加记录和查找记录功能
+//测试了增加记录,查找记录和删除记录的功能
 int main(){
 	
 	CRecordManager A("student");
@@ -520,7 +520,18 @@ int main(){
 	std_id.next = &name;
 	name.next = NULL;
 	A.SelectRecord(NULL,&std_id,8);
-	
+	condition* cond = new condition;
+	strcpy(cond->attrname, "std_id");
+	cond->cond = GT;
+	strcpy(cond->value, "10");
+	cond->type = INT;
+	cond->attroffset = 0;
+	cond->attrlength = 3;
+	cond->next = NULL;
+	A.SelectRecord(cond, &std_id, 8);
+	A.DeleteRecord(cond, 8);
+	A.SelectRecord(NULL, &std_id, 8);
+	system("pause");
 	return 0;
 }
-*/
+

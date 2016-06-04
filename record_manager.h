@@ -17,7 +17,7 @@ public:
 	~CRecordManager(){}
 
 	short int SelectRecord(condition *conds, column *cols, unsigned int recordlen);//,unsigned int recordnum);
-	short int DeleteRecord(condition *conds, unsigned int recordlen, unsigned int recordnum);
+	short int DeleteRecord(condition *conds, unsigned int recordlen);
 	short int IsValueExists(column *cols, char *value, unsigned int recornum);
 	unsigned int InsertValues(insertvalue *values, unsigned int recordlen);
 	
