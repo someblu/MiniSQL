@@ -1236,7 +1236,7 @@ void CInterpret::ExecDelete()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
 }
 
-//This function implements the 'insert' operation in sql
+//实现SQL中的 insert 功能 
 void CInterpret::ExecInsert()
 {
 	insertvalue *tempval;
@@ -1334,7 +1334,7 @@ void CInterpret::ExecInsert()
 		printf("Table '%s' dose not exist! Please check your input!\n", m_tabname);
 }
 
-//This function implements the 'drop table' operation in sql
+//实现SQL中的 drop table 功能 
 void CInterpret::ExecDropTable()
 {
 	char ch,syscommand[FILENAMELEN];
@@ -1386,7 +1386,7 @@ void CInterpret::ExecDropTable()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
 }
 
-//This function implements the 'drop index' operation in sql
+//实现SQL中的 drop index 功能 
 void CInterpret::ExecDropIndex()
 {
 	char ch,syscommand[FILENAMELEN];
@@ -1412,7 +1412,7 @@ void CInterpret::ExecDropIndex()
 
 }
 
-//This function implements the 'create table' operation in sql
+//实现SQL中的 create table 功能 
 void CInterpret::ExecCreateTable()
 {
 	short int primarynum = 0;
@@ -1477,7 +1477,7 @@ void CInterpret::ExecCreateTable()
 	printf("Table '%s' is created successfully\n",m_tabname);
 }
 
-//This function implements the 'create index' operation in sql
+//实现SQL中的 create index 功能 
 void CInterpret::ExecCreateIndex()
 {
 	char filename[FILENAMELEN];
@@ -1530,7 +1530,7 @@ void CInterpret::ExecCreateIndex()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
 }
 
-//This function implements the 'execfile' operation as demanded
+//实现文件操作 
 void CInterpret::ExecFile()
 {
 	FILE *fp;
