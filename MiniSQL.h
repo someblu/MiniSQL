@@ -2,7 +2,7 @@
 //#define AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_
 
 //#if _MSC_VER > 1000
-//#pragma once
+#pragma once
 //#endif // _MSC_VER > 1000
 
 //#include "resource.h"
