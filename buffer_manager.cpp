@@ -87,6 +87,8 @@ unsigned int CBufferManager::get_blank_block(short int index_table)
 	else{ //表示无空块，须判断换出哪个块和是否有必要写回文件
 		number=max_count_number();
 		m_ptheblocks[number].flush_block();
+		for(p=m_ptheblocks[number].m_address;p<m_ptheblocks[number].m_address+BLOCK_SIZE;p++)
+		   *p='$';
 	}
 	using_block(number);
 	m_ptheblocks[number].m_index_table=index_table;
