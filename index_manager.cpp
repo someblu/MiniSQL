@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b ·µ»Ø1
+int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b è¿”å›1
 {   
     char *cha; char *chb; char tempa,tempb;
 	int numa,numb;
@@ -18,7 +18,7 @@ int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b ·µ»Ø1
 		   for(;*cha!='\0'&&(*chb!='\0');cha++,chb++)
 		   {    
 			   tempa=*cha; tempb=*chb;
-			   if(tempa>='A'&&tempa<='Z')   //ºöÂÔ´óĞ¡Ğ´£¬È«²¿µ±×öĞ¡Ğ´×ÖÄ¸
+			   if(tempa>='A'&&tempa<='Z')   //å¿½ç•¥å¤§å°å†™ï¼Œå…¨éƒ¨å½“åšå°å†™å­—æ¯
 				   tempa=tempa+32;
 			   if(tempb>='A'&&tempb<='Z')
 				   tempb=tempb+32;
@@ -28,21 +28,21 @@ int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b ·µ»Ø1
 				   return 0;
 		   }
 		   if(*cha=='\0'&&*chb=='\0')
-			   return 1;//ÏàµÈ
+			   return 1;//ç›¸ç­‰
 		   else if( *cha!='\0'&&*chb=='\0')
 			   return 1;//a>b;
 		   else return 0;
 
            break;
 	case INT:
-		   numa=atoi(a);  //×ª»¯³ÉÕûĞÍ
+		   numa=atoi(a);  //è½¬åŒ–æˆæ•´å‹
 		   numb=atoi(b);
 		   if(numa>=numb)  return 1;
 		   else return 0;
 		   break;
 	case FLOAT:
 		   floata=atof(a);
-		   floatb=atof(b);  //×ª»¯³ÉfloatÀàĞÍ
+		   floatb=atof(b);  //è½¬åŒ–æˆfloatç±»å‹
 		   if(floata>=floatb) return 1;
 		   else return 0;
 		   break;
@@ -50,14 +50,14 @@ int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b ·µ»Ø1
 	return -1;
 }
 
-int CIndexManager::quick_insert(char *value,int tag,int blocknumber,int offsetinblock)//tagÎª±È½Ï·½Ê½
+int CIndexManager::quick_insert(char *value,int tag,int blocknumber,int offsetinblock)//tagä¸ºæ¯”è¾ƒæ–¹å¼
 {
 	unit_node *currentnode,*save_pointer;
 	unit_node *newnode = new unit_node;
 	newnode->block_number=blocknumber;
 	newnode->offset_in_block=offsetinblock;
 	strcpy(newnode->key,value);
-	if(this->m_count>=31)   //Èç¹û¸Ã¿éÒÑ¾­´æ´¢ÁË31Ìõ¼ÇÂ¼£¬ÒÑÂú
+	if(this->m_count>=31)   //å¦‚æœè¯¥å—å·²ç»å­˜å‚¨äº†31æ¡è®°å½•ï¼Œå·²æ»¡
 	{
 		printf("mistake in using this function\n");
 		return 0;
@@ -65,7 +65,7 @@ int CIndexManager::quick_insert(char *value,int tag,int blocknumber,int offsetin
 	else
 	{
 		currentnode=this->m_first;
-		while(currentnode!=NULL&&keycompare(newnode->key,currentnode->key,tag)==1)//±éÀúÁ´±í£¬ÕÒµ½ĞÂ½Úµã²åÈëµÄÎ»ÖÃ
+		while(currentnode!=NULL&&keycompare(newnode->key,currentnode->key,tag)==1)//éå†é“¾è¡¨ï¼Œæ‰¾åˆ°æ–°èŠ‚ç‚¹æ’å…¥çš„ä½ç½®
 			save_pointer=currentnode;
 			currentnode=currentnode->next;
 	}
@@ -75,7 +75,7 @@ int CIndexManager::quick_insert(char *value,int tag,int blocknumber,int offsetin
 	return 1;
 }
 
-int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetinblock,int total_idx_block)  //·µ»ØindexÎÄ¼şµÄ×Ü¿éÊı
+int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetinblock,int total_idx_block)  //è¿”å›indexæ–‡ä»¶çš„æ€»å—æ•°
 {
 	CIndexManager *currenthead=this,*newhead,*head_save=currenthead;
 	unit_node *newnode;
@@ -88,7 +88,7 @@ int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetin
 			return total_idx_block;
 		else return 0;
 	}
-	else if(head_save!=currenthead)   //Á´±íµÄÖĞ¼äĞèÒª¼Ó¿é
+	else if(head_save!=currenthead)   //é“¾è¡¨çš„ä¸­é—´éœ€è¦åŠ å—
 	{
 		total_idx_block++;
         newhead = new CIndexManager;
@@ -100,12 +100,12 @@ int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetin
 		newhead->m_next=currenthead;
 		head_save->m_next=newhead;
 
-		newhead->m_blocknumber = total_idx_block-1; //ÎªĞÂ¿é°²ÅÅ¿éºÅ
+		newhead->m_blocknumber = total_idx_block-1; //ä¸ºæ–°å—å®‰æ’å—å·
 		head_save->m_next_block_number = total_idx_block-1;
-		if(currenthead!=NULL)        //²åÈëµÄÊÇÖĞ¼ä½Úµã²»ÊÇ×îºóµÄ½Úµã
+		if(currenthead!=NULL)        //æ’å…¥çš„æ˜¯ä¸­é—´èŠ‚ç‚¹ä¸æ˜¯æœ€åçš„èŠ‚ç‚¹
 			newhead->m_next_block_number = currenthead->m_blocknumber;
 		else
-			newhead->m_next_block_number = -1;   //Èç¹ûĞÂ¿éÊÇ×îºóÒ»¿é£¬¼ÇÂ¼µÄÏÂÒ»¸ö¿éºÅÎª-1£»
+			newhead->m_next_block_number = -1;   //å¦‚æœæ–°å—æ˜¯æœ€åä¸€å—ï¼Œè®°å½•çš„ä¸‹ä¸€ä¸ªå—å·ä¸º-1ï¼›
 
 		newnode->next=NULL;
 		strcpy(newnode->key,value);
@@ -114,11 +114,11 @@ int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetin
 		return total_idx_block;
 	}
 	else{
-		total_idx_block++;				//×îÍ·ÉÏĞèÒªĞÂÔö¼ÓÒ»¸ö½Úµã
+		total_idx_block++;				//æœ€å¤´ä¸Šéœ€è¦æ–°å¢åŠ ä¸€ä¸ªèŠ‚ç‚¹
 		newhead = new CIndexManager;
 	    newnode = new unit_node;
-		//ÒòÎªthisÖ¸Õë²»ÄÜ¸Ä±ä£¬Òò´ËĞÂ½¨Ò»¸ö½Úµãºó£¬½«thisµÄÊı¾İºÍĞÂ½¨µÄ½Úµã½»»»
-		if(currenthead->m_count>0){                                       //Á´±í²»ÍêÈ«Îª¿Õ
+		//å› ä¸ºthisæŒ‡é’ˆä¸èƒ½æ”¹å˜ï¼Œå› æ­¤æ–°å»ºä¸€ä¸ªèŠ‚ç‚¹åï¼Œå°†thisçš„æ•°æ®å’Œæ–°å»ºçš„èŠ‚ç‚¹äº¤æ¢
+		if(currenthead->m_count>0){                                       //é“¾è¡¨ä¸å®Œå…¨ä¸ºç©º
 			strcpy(newhead->m_minkey,currenthead->m_minkey);
 			newhead->m_first=currenthead->m_first;
 			newhead->m_next=currenthead->m_next;
@@ -132,7 +132,7 @@ int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetin
 			currenthead->m_count = 1;
 		}
 		else{
-			currenthead->m_blocknumber = total_idx_block-1; //Ö®Ç°µÄÁ´±í
+			currenthead->m_blocknumber = total_idx_block-1; //ä¹‹å‰çš„é“¾è¡¨
 			currenthead->m_next_block_number = -1;
 			currenthead->m_count = 1;
 			currenthead->m_first = newnode;
@@ -152,30 +152,31 @@ int CIndexManager::insert_entry(char *value,int tag,int blocknumber,int offsetin
 
 int CIndexManager::CreateIndex(column *cols, unsigned int recordlen)
 {
-	int table_blocknum=0;//¼ÇÂ¼µ±Ç°ÊÇTABLE µÚ¼¸¿éBLOCK
-	int index_blocknum=0;//¼ÇÂ¼µ±Ç°ÊÇINDEX µÚ¼¸¿éBLOCK
+	int table_blocknum=0;//è®°å½•å½“å‰æ˜¯TABLE ç¬¬å‡ å—BLOCK
+	int index_blocknum=0;//è®°å½•å½“å‰æ˜¯INDEX ç¬¬å‡ å—BLOCK
 	int map_blocknum=0;
-	unsigned int current_record=1;//µ±Ç°µÚ¼¸Ìõ¼ÇÂ¼
+	unsigned int current_record=1;//å½“å‰ç¬¬å‡ æ¡è®°å½•
 	string this_table,this_index;
 	int currentblock;
 	int table_total_block;
 	int offset_in_block;
 	int records_per_block=BLOCK_SIZE/recordlen;
-	insertvalue value; //²åÈëÒ»¸öÊôĞÔ
+	insertvalue value; //æ’å…¥ä¸€ä¸ªå±æ€§
 	int record_number;	
 	char *p,*temp;
 	int *intp;
 
-	
-	this_table = m_tablename + ".tab"; 
-	this_index = m_indexname + ".idx";
+
+    this_table = m_tablename + ".tab";
+    //this_map = m_indexname + ".map";
+    this_index = m_indexname + ".idx";
    
-    currentblock=get_block(INDEX, this_index,0);//×¼±¸Õû¸öindexµÄµÚ0¿é£¬¸Ã¿ì²»±»·ÅÔÚÊ÷ÖĞ
+    currentblock=get_block(INDEX, this_index,0);//å‡†å¤‡æ•´ä¸ªindexçš„ç¬¬0å—ï¼Œè¯¥å¿«ä¸è¢«æ”¾åœ¨æ ‘ä¸­
 	p=m_ptheblocks[currentblock].m_address;
 	intp=(int*)p;
 	*intp=1;
 	intp++;
-	*intp=-1;//ÏÂÒ»¿éºÅ
+	*intp=-1;//ä¸‹ä¸€å—å·
 	p=p+8;
 	strcpy(p,cols->colname);
 
@@ -194,18 +195,18 @@ int CIndexManager::CreateIndex(column *cols, unsigned int recordlen)
     table_total_block=*intp;
 	m_ptheblocks[currentblock].used_block();
 	////
-	for(table_blocknum=1;table_blocknum<=table_total_block;table_blocknum++)//´ÓtableÎÄ¼şÖĞµÄµÚ1¿é¿ªÊ¼¶ÁÆğ£¬ÒòÎªµÚ0¿é´æÁË×Ü¿éÊı
+	for(table_blocknum=1;table_blocknum<=table_total_block;table_blocknum++)//ä»tableæ–‡ä»¶ä¸­çš„ç¬¬1å—å¼€å§‹è¯»èµ·ï¼Œå› ä¸ºç¬¬0å—å­˜äº†æ€»å—æ•°
 	{ 
 		 currentblock=get_block(TABLE,this_table,table_blocknum);
 		 p=m_ptheblocks[currentblock].m_address;
-		 for(;p<m_ptheblocks[currentblock].m_address+BLOCK_SIZE;p=p+recordlen)//ÖğÌõ¶ÁÈ¡¼ÇÂ¼
+		 for(;p<m_ptheblocks[currentblock].m_address+BLOCK_SIZE;p=p+recordlen)//é€æ¡è¯»å–è®°å½•
 		 {
-			if(*p!='$')                                                      //¼ÇÂ¼´æÔÚ
+			if(*p!='$')                                                      //è®°å½•å­˜åœ¨
 			{
 
-				offset_in_block=(p-m_ptheblocks[currentblock].m_address)/recordlen; //»ñµÃ¸Ã¼ÇÂ¼µÄÏà¶ÔÓÚ¿éµÄÆ«ÒÆµØÖ·
+				offset_in_block=(p-m_ptheblocks[currentblock].m_address)/recordlen; //è·å¾—è¯¥è®°å½•çš„ç›¸å¯¹äºå—çš„åç§»åœ°å€
 				record_number=records_per_block*(m_ptheblocks[currentblock].m_offset_number-1)+offset_in_block;
-				//½¨Á¢Ë÷ÒıÖµ
+				//å»ºç«‹ç´¢å¼•å€¼
 				temp=p+cols->coloffset;
 				value.length=cols->collength;
 				value.next=NULL;
@@ -234,9 +235,12 @@ int CIndexManager::save_index()
 	int current_block;
 	int block_count=0;
 	char *p; int *intp;
-	string this_index = m_indexname + ".idx";
 
-	for(;currenthead!=NULL;currenthead=currenthead->m_next) {     //´ÓµÚÒ»¸ö½Úµã¿ªÊ¼Ğ´»Ø
+    //this_table = m_tablename + ".tab";
+    //this_map = m_indexname + ".map";
+    string this_index = m_indexname + ".idx";
+
+	for(;currenthead!=NULL;currenthead=currenthead->m_next) {     //ä»ç¬¬ä¸€ä¸ªèŠ‚ç‚¹å¼€å§‹å†™å›
         block_count++; 
 		current_block=get_block(INDEX,this_index,block_count);
 		if(current_block==-1) {
@@ -248,14 +252,14 @@ int CIndexManager::save_index()
 			*p='$';
 		p=m_ptheblocks[current_block].m_address;
 		intp=(int*)p;
-		*intp=currenthead->m_blocknumber;      //Ã¿¸ö¿éÍ·¶¼Ğ´Èë¿éºÅ£¬¼ÇÂ¼×ÜÊıºÍÏÂÒ»¸ö¿éºÅ
+		*intp=currenthead->m_blocknumber;      //æ¯ä¸ªå—å¤´éƒ½å†™å…¥å—å·ï¼Œè®°å½•æ€»æ•°å’Œä¸‹ä¸€ä¸ªå—å·
 		intp++;
 		*intp=currenthead->m_count;
 		intp++;
 		*intp=currenthead->m_next_block_number;
 		p=p+12;
 		strcpy(p,currenthead->m_minkey);
-		//°ÑË÷ÒıÖµºÍ¼ÇÂ¼µØÖ·ÖğÌõĞ´»Ø¿é
+		//æŠŠç´¢å¼•å€¼å’Œè®°å½•åœ°å€é€æ¡å†™å›å—
 		p=m_ptheblocks[current_block].m_address;
 		for(currentnode=currenthead->m_first;currentnode!=NULL;currentnode=currentnode->next) {
 			p=p+INDEX_RECORD_LEN;
@@ -282,23 +286,25 @@ int CIndexManager::build_index(){
 	int block_no;
 	char *p; int *intp;
 
-	string this_index = m_indexname + ".idx";
+    //this_table = m_tablename + ".tab";
+    //this_map = m_indexname + ".map";
+    string this_index = m_indexname + ".idx";
 
-	current_block=get_block(INDEX, this_index,0);//¶ÁÈ¡
+	current_block=get_block(INDEX, this_index,0);//è¯»å–
 	p=m_ptheblocks[current_block].m_address;
 	intp=(int*)p;
 	int total_idxblock_number = *(intp);
-    if(total_idxblock_number==1)   //Èç¹ûÕâÊÇÒ»¸öÃ»ÓĞ¼ÇÂ¼µÄindex£¬ÎªÁË²åÈë¼ÇÂ¼Ê±·½±ãÅĞ¶Ï£¬½«this->m_countÉèÖÃÎª0
+    if(total_idxblock_number==1)   //å¦‚æœè¿™æ˜¯ä¸€ä¸ªæ²¡æœ‰è®°å½•çš„indexï¼Œä¸ºäº†æ’å…¥è®°å½•æ—¶æ–¹ä¾¿åˆ¤æ–­ï¼Œå°†this->m_countè®¾ç½®ä¸º0
     	this->m_count = 0;
 	intp++;
 	block_no = *(intp);
 	m_ptheblocks[current_block].used_block();
 	//...........
-	while(block_no!=-1) {     //´ÓµÚÒ»¸ö¿é¿ªÊ¼¶ÁÈ¡
+	while(block_no!=-1) {     //ä»ç¬¬ä¸€ä¸ªå—å¼€å§‹è¯»å–
 		current_block=get_block(INDEX,this_index,block_no);
 		p=m_ptheblocks[current_block].m_address;
 		intp=(int*)p;
-		currenthead->m_blocknumber = *intp;      //Ã¿¸ö¿éÍ·¶¼Ğ´Èë¿éºÅ£¬¼ÇÂ¼×ÜÊıºÍÏÂÒ»¸ö¿éºÅ
+		currenthead->m_blocknumber = *intp;      //æ¯ä¸ªå—å¤´éƒ½å†™å…¥å—å·ï¼Œè®°å½•æ€»æ•°å’Œä¸‹ä¸€ä¸ªå—å·
 		intp++;
 		currenthead->m_count = *intp;
 		intp++;
@@ -306,13 +312,13 @@ int CIndexManager::build_index(){
 		p=p+12;
 		strcpy(currenthead->m_minkey,p);
 
-		//¸øÏÂÒ»¸ö¿éºÍ¿éµÄµÚÒ»Ìõ¼ÇÂ¼·ÖÅä¿Õ¼ä
+		//ç»™ä¸‹ä¸€ä¸ªå—å’Œå—çš„ç¬¬ä¸€æ¡è®°å½•åˆ†é…ç©ºé—´
 		newhead = new CIndexManager;
 		currenthead->m_next = newhead;
 		currentnode = new unit_node;
 		currenthead ->m_first = currentnode;
 
-		//ÖğÌõ¶ÁÈ¡Ë÷ÒıÖµºÍ¼ÇÂ¼µØÖ·
+		//é€æ¡è¯»å–ç´¢å¼•å€¼å’Œè®°å½•åœ°å€
 		p=m_ptheblocks[current_block].m_address+INDEX_RECORD_LEN;
 		for(;p<m_ptheblocks[current_block].m_address+BLOCK_SIZE;p=p+INDEX_RECORD_LEN) {
 			if(*p!='$'){				
@@ -328,14 +334,14 @@ int CIndexManager::build_index(){
 		}
 		//
 		delete newnode;
-		currentnode->next = NULL;    //É¾³ı×îºóÒ»¸öÃ»ÓĞË÷Òı¼üµÄ½Úµã
+		currentnode->next = NULL;    //åˆ é™¤æœ€åä¸€ä¸ªæ²¡æœ‰ç´¢å¼•é”®çš„èŠ‚ç‚¹
         m_ptheblocks[current_block].written_block();
 		m_ptheblocks[current_block].used_block();
 		//.........
 		if((block_count+1)<total_idxblock_number)
 			currenthead = currenthead->m_next;
 		else{
-			delete newnode;                   //É¾³ı×îºóÒ»¸öÃ»ÓĞ´æÊı¾İµÄindex manager
+			delete newnode;                   //åˆ é™¤æœ€åä¸€ä¸ªæ²¡æœ‰å­˜æ•°æ®çš„index manager
 			currenthead->m_next = NULL;
 		}
 
@@ -345,7 +351,7 @@ int CIndexManager::build_index(){
 
 }
 
-void CIndexManager::freespace()           //Çå¿ÕÓÃÀ´ÔİÊ±´æ´¢Êı¾İµÄb+Ê÷
+void CIndexManager::freespace()           //æ¸…ç©ºç”¨æ¥æš‚æ—¶å­˜å‚¨æ•°æ®çš„b+æ ‘
 {
 	CIndexManager *current_head1,*current_head2;
 	unit_node *current_node1,*current_node2;
@@ -374,15 +380,16 @@ int CIndexManager::SelectIndex(condition *conds, column *cols, unsigned int reco
 	int destine_blocknum,destine_offset;
 	column *col=cols;
 
-	this_index = m_indexname + ".idx";
-	this_table = m_tablename + ".tab";
+    this_table = m_tablename + ".tab";
+    //this_map = m_indexname + ".map";
+    this_index = m_indexname + ".idx";
 	
-    if(conds->cond!=EQ)    //index²éÕÒÖ»ÔÊĞíµÈÖµ²éÕÒ
+    if(conds->cond!=EQ)    //indexæŸ¥æ‰¾åªå…è®¸ç­‰å€¼æŸ¥æ‰¾
 	{
 		printf("compare condition error\n");
 		return 0;
 	}
-	//²éÕÒÊ±²»»á¸Ä±äÎÄ¼ş½á¹¹£¬Òò´Ë²»ĞèÒª½¨Á¢³éÏóµÄb+Ê÷
+	//æŸ¥æ‰¾æ—¶ä¸ä¼šæ”¹å˜æ–‡ä»¶ç»“æ„ï¼Œå› æ­¤ä¸éœ€è¦å»ºç«‹æŠ½è±¡çš„b+æ ‘
 	blocknumber=get_block(INDEX,this_index,0);
 	if(blocknumber==-1)
 	{
@@ -403,12 +410,12 @@ int CIndexManager::SelectIndex(condition *conds, column *cols, unsigned int reco
 	p=m_ptheblocks[blocknumber].m_address;
 	intp=(int*)(p+8);
 	nextblock_number=*intp;
-	min_key=p+12;                   //»ñµÃ¸Ã½ÚµãÖĞ×îĞ¡µÄÖµ
+	min_key=p+12;                   //è·å¾—è¯¥èŠ‚ç‚¹ä¸­æœ€å°çš„å€¼
 	while(keycompare(conds->value,min_key,conds->type)==1)
 	 {
 		 block_save=m_ptheblocks[blocknumber].m_offset_number;
 		 m_ptheblocks[blocknumber].used_block();
-		 if(nextblock_number==-1)//µ½ÁË×îºóÒ»¿é
+		 if(nextblock_number==-1)//åˆ°äº†æœ€åä¸€å—
 			 break;
 		 blocknumber=get_block(INDEX,this_index,nextblock_number);
 		 p=m_ptheblocks[blocknumber].m_address;
@@ -417,10 +424,10 @@ int CIndexManager::SelectIndex(condition *conds, column *cols, unsigned int reco
 	     min_key=p+12;
 	}
 	m_ptheblocks[blocknumber].used_block();
-	blocknumber=get_block(INDEX,this_index,block_save);//ÕÒµ½Ä¿±ê¿é
+	blocknumber=get_block(INDEX,this_index,block_save);//æ‰¾åˆ°ç›®æ ‡å—
 	p=m_ptheblocks[blocknumber].m_address+INDEX_RECORD_LEN;
 
-	while(col)                                       //´òÓ¡¸÷¸öÊôĞÔµÄÃû³Æ
+	while(col)                                       //æ‰“å°å„ä¸ªå±æ€§çš„åç§°
 	{
 		int remain = col->collength - strlen(col->colname);
 		printf("%s", col->colname);
@@ -476,9 +483,9 @@ int CIndexManager::DeleteIndex(condition *conds,unsigned int recordlen)
 	char *temp;
 	int records_per_block=BLOCK_SIZE/recordlen;
 
-	this_index = m_indexname + ".idx";
 	this_table = m_tablename + ".tab";
-	this_map = m_tablename + ".map";
+	this_map = m_indexname + ".map";
+	this_index = m_indexname + ".idx";
 
     if(conds->cond!=EQ)
 	{
@@ -487,160 +494,116 @@ int CIndexManager::DeleteIndex(condition *conds,unsigned int recordlen)
 	}
 	build_index();
 	CIndexManager *currenthead=this,*newhead,*head_save=currenthead, *pre_head = head_save;
-	unit_node *currentnode,*node_save=currentnode;
+	unit_node *currentnode,*node_save=currentnode,*tempnode;
 
-    for(;currenthead!=NULL && keycompare(value,currenthead->m_minkey,tag)==1;currenthead=currenthead->m_next){
+    for(;currenthead!=NULL && keycompare(conds->value,currenthead->m_minkey,conds->type)==1;currenthead=currenthead->m_next)
+    {//éå†æŸ¥æ‰¾ç´¢å¼•ä½ç½®
     	pre_head = head_save;
 		head_save=currenthead;
-    }	
+    }
 	currentnode = head_save->m_first;
-	for(currentnode!=NULL;currentnode=currentnode->next){
-		if(strcmp(conds->value,currentnode->value)==1 ){
-			head_save->m_count--;   //×ÜË÷ÒıÊı¼õÒ»
-			//É¾³ırecordºÍmapÎÄ¼şÖĞ¶ÔÓ¦µÄ¼ÇÂ¼
+	for(currentnode!=NULL;currentnode=currentnode->next)
+    {
+		if(strcmp(conds->value,currentnode->key)==1 )
+        {
+			head_save->m_count--;   //æ€»ç´¢å¼•æ•°å‡ä¸€
+
+            //æ›´æ–°æœ€å°å€¼
+            if(currentnode!=head_save->m_first)
+                tempnode=head_save->m_first;
+            else
+                tempnode=head_save->m_first->next;
+            strcpy(head_save->m_minkey,tempnode->key);
+            while(tempnode!=NULL)
+            {
+                if(keycompare(head_save->m_minkey,tempnode->key) == 1 && tempnode!=currentnode)
+                    strcpy(head_save->m_minkey,tempnode->key);
+                tempnode=tempnode->next;
+            }
+
+			//åˆ é™¤recordå’Œmapæ–‡ä»¶ä¸­å¯¹åº”çš„è®°å½•
 			recordblock = get_block(TABLE,this_table,currentnode->block_number);
+            if(recordblock==-1)
+            {
+                printf("memory access error");
+                return 0;
+            }
+            //åˆ é™¤RECORD
+            m_ptheblocks[recordblock].m_being_used=1;
 			p = m_ptheblocks[recordblock].m_address+recordlen*(currentnode->offset_in_block-1);
-			for(;p<m_ptheblocks[recordblock].m_address+recordlen*(currentnode->offset_in_block);p++)
+			for(;p<m_ptheblocks[recordblock].m_address+recordlen*(currentnode->offset_in_block);p++)//åˆ é™¤RECORD
 				*p='$';
+            m_ptheblocks[recordblock].written_block();
+            m_ptheblocks[recordblock].used_block();
+
 			int recordnum = (currentnode->block_number-1) * records_per_block+currentnode->offset_in_block;
 			int map_blocknum = recordnum/BLOCK_SIZE + 1;
 			int map_offset = recordnum % BLOCK_SIZE;
 			mapblock = get_block(MAP,this_map,map_blocknum);
+            if(mapblock==-1)
+            {
+                printf("memory access error");
+                return 0;
+            }
+            //åˆ é™¤MAP
+            m_ptheblocks[mapblock].m_being_used=1;
 			p=m_ptheblocks[mapblock].m_address+map_offset-1;
 			*p = '$';
+            m_ptheblocks[mapblock].written_block();
+            m_ptheblocks[mapblock].used_block();
 			//.......
-			if(node_save!=currentnode){     //É¾³ıµÄÊÇÖĞ¼ä½Úµã»ò×îºóµÄ½Úµã
+
+			if(node_save!=currentnode)
+            {     //åˆ é™¤çš„æ˜¯ä¸­é—´èŠ‚ç‚¹æˆ–æœ€åçš„èŠ‚ç‚¹
 				node_save->next = currentnode ->next;
 				delete currentnode;
-				save_index();
-				freespace();
-				return 1;
+                break;
 			}
-			else if(currentnode->next!=NULL){           //É¾³ıµÄÊÇµÚÒ»¸öµÄË÷Òı¼ü£¬µ«½ÚµãÖĞ»¹ÓĞÆäËûµÄË÷Òı¼ü
+			else if(currentnode->next!=NULL)
+            {           //åˆ é™¤çš„æ˜¯ç¬¬ä¸€ä¸ªçš„ç´¢å¼•é”®ï¼Œä½†èŠ‚ç‚¹ä¸­è¿˜æœ‰å…¶ä»–çš„ç´¢å¼•é”®
 				head_save->m_first = currentnode->next;
 				delete currentnode;
-				save_index();
-				freespace();
-				return 1;
+                break;
 			}
-			else{						//É¾³ıµÄÊÇ½ÚµãÖĞ×îºóÒ»¸öË÷ÒıÖµ£¬ĞèÒªÕû¸ö½ÚµãÒ»ÆğÉ¾³ı
+			else
+            {						//åˆ é™¤çš„æ˜¯èŠ‚ç‚¹ä¸­æœ€åä¸€ä¸ªç´¢å¼•å€¼ï¼Œéœ€è¦æ•´ä¸ªèŠ‚ç‚¹ä¸€èµ·åˆ é™¤
 				blocknumber = get_block(INDEX,this_index,0);
 				p=m_ptheblocks[blocknumber].m_address;
 	            intp=(int*)p;
-	            int last_blk_num = *intp-1;
-	            *intp--;
+	            *intp--;//total_block_number--
 	            m_ptheblocks[blocknumber].written_block();
-	            m_ptheblocks[block_count].used_block();      //¿éµÄ±àºÅÊÇ·ñĞèÒªµ÷Õû£¿ÕâÀïÃ»ÓĞµ÷Õû
+	            m_ptheblocks[block_count].used_block();
 
-				if(pre_head!=currenthead){
+				if(pre_head!=currenthead)
+				{
 					pre_head->m_next = currenthead;
+					blocknumber = head_save->m_blocknumber;
 					delete head_save;
-					save_index();
-					freespace();
-					return 1;
 				}
-				else{
+				else
+                {
 					this->m_blocknumber=currenthead->m_blocknumber;
-					this->m_count = currenthead->m_count;        
+					this->m_count = currenthead->m_count;
 					this->m_next = currenthead->m_next;
-					this->m_first = currenthead->m_first;   
-					strcpy(this->m_minkey,currenthead->value);
-					this->m_next_block_number=currenthead->m_next_block_number; 
+					this->m_first = currenthead->m_first;
+					strcpy(this->m_minkey,currenthead->m_minkey);
+					this->m_next_block_number=currenthead->m_next_block_number;
+					blocknumber = currenthead->m_blocknumber;
 					delete currenthead;
-					save_index();
-					freespace();
-					return 1;
 				}
-			}							
+				//åˆ é™¤å—åæ›´æ–°å—ç¼–å·
+				for(currenthead=this;currenthead!=NULL;currenthead=currenthead->m_next)
+					if(currenthead->m_blocknumber > blocknumber)
+						currenthead->m_blocknumber--;
+
+                break;
+			}
 		}
 		node_save = currentnode;
 	}
-	//Ô­À´µÄ´úÂë¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£
-	/*
-	 blocknumber=get_block( INDEX,this_index,0);
-	 if(blocknumber==-1)
-	 {
-		 printf("memory access error");
-		 return 0;
-	 }
-	 m_ptheblocks[blocknumber].m_being_used=1;
-	 p=m_ptheblocks[blocknumber].m_address;
-	 intp=(int*)(p+4);
-     nextblock_number=*intp;
-	 m_ptheblocks[blocknumber].used_block();
-     blocknumber=get_block(INDEX,this_index,nextblock_number);
-     m_ptheblocks[blocknumber].m_being_used=1;
-	 p=m_ptheblocks[blocknumber].m_address;
-	 intp=(int*)(p+8);
-	 nextblock_number=*intp;
-	 min_key=p+12;
-	 while(keycompare(conds->value,min_key,conds->type)==1)
-	 {
-		 block_save=m_ptheblocks[blocknumber].m_offset_number;
-		 m_ptheblocks[blocknumber].used_block();
-         if(nextblock_number==-1)//µ½ÁË×îºóÒ»¿é
-			 break;
-		 blocknumber=get_block(INDEX,this_index,nextblock_number);
-         m_ptheblocks[blocknumber].m_being_used=1;
-		 p=m_ptheblocks[blocknumber].m_address;
-	     intp=(int*)(p+8);
-         nextblock_number=*intp;
-	     min_key=p+12;
-	 }
-	 m_ptheblocks[blocknumber].used_block();
-	 blocknumber=get_block(INDEX,this_index,block_save);//ÕÒµ½Ä¿±ê¿é
-	 m_ptheblocks[blocknumber].m_being_used=1;
-	 p=m_ptheblocks[blocknumber].m_address+INDEX_RECORD_LEN;
-     while(p<m_ptheblocks[blocknumber].m_address+BLOCK_SIZE)
-	 {
-		 key=p+8;
-		 if(strcmp(key,conds->value)==0)//ÕÒµ½
-		 {
-			 int map_block_number,map_in_offset,record_num;
-			 intp=(int*)p;
-			 destine_blocknum=*intp;
-			 intp++;
-			 destine_offset=*intp;
-			 record_num=records_per_block *(destine_blocknum-1)+destine_offset;
-             recordblock=get_block( TABLE,this_table,destine_blocknum);
-             m_ptheblocks[recordblock].m_being_used=1;
-			 record_point=m_ptheblocks[recordblock].m_address+recordlen*(destine_offset+1);
-			 //É¾³ıRECORD
-             for(temp=record_point;temp<record_point+recordlen;temp++)
-				 *temp='$';
-			
-			 m_ptheblocks[recordblock].written_block();
-			 m_ptheblocks[recordblock].used_block();
-			 //É¾³ıINDEX
-             for(temp=p;temp<p+INDEX_RECORD_LEN;temp++)
-			    *temp='$';
-			 written_block();
-			 m_ptheblocks[blocknumber].written_block();
-			 m_ptheblocks[blocknumber].used_block();
-			 //É¾³ıMAP
-             map_block_number=record_num/BLOCK_SIZE+1;
-			 map_in_offset=record_num-(map_block_number-1)*BLOCK_SIZE;
-			 mapblock=get_block(MAP,this_index,map_block_number);
-			 if(mapblock==-1)
-			 {
-		      printf("memory access error");
-		      return 0;
-			 }
-			 m_ptheblocks[mapblock].m_being_used=1;
-			 p=m_ptheblocks[mapblock].m_address;
-			 temp=p+map_in_offset-1;//ÒòÎªOFFSET´Ó1ËãÆğ
-			 *p='$';
-			 written_block();
-			 m_ptheblocks[mapblock].written_block();
-			 m_ptheblocks[mapblock].used_block();
-			 return 1;
-		 }
-		 p=p+INDEX_RECORD_LEN;
-	 }
-
-	 printf("Can not find this record by index\n");
-	 return 0;
-	 */
+    save_index();
+    freespace();
+    return 1;
 }
 
 int CIndexManager::InsertIndex(insertvalue *value, unsigned int recordnum, int recordlen)
@@ -654,13 +617,16 @@ int CIndexManager::InsertIndex(insertvalue *value, unsigned int recordnum, int r
 	int total_block_number;
 	int start_block=1;
 
-	this_index = m_indexname + ".idx";
+    this_table = m_tablename + ".tab";
+    //this_map = m_indexname + ".map";
+    this_index = m_indexname + ".idx";
 	
 	int r_p_b = BLOCK_SIZE/recordlen;	
 	destine_blocknum=recordnum/r_p_b+1;
-	destine_offset=recordnum%r_p_b;		//ÔÚrecordÎÄ¼şÖĞ¶¨Î»
+	destine_offset=recordnum%r_p_b;		//åœ¨recordæ–‡ä»¶ä¸­å®šä½
 
-	blocknumber=get_block(INDEX, this_index,0);//×¼±¸Õû¸öindexµÄµÚ0¿é£¬¸Ã¿ì²»±»·ÅÔÚÊ÷ÖĞ
+	blocknumber=get_block(INDEX, this_index,0);//å‡†å¤‡æ•´ä¸ªindexçš„ç¬¬0å—ï¼Œè¯¥å¿«ä¸è¢«æ”¾åœ¨æ ‘ä¸­
+	m_ptheblocks[blocknumber].m_being_used=1;
 	p=m_ptheblocks[blocknumber].m_address;
 	intp=(int*)p;
 	total_block_number = *(intp);
@@ -668,194 +634,12 @@ int CIndexManager::InsertIndex(insertvalue *value, unsigned int recordnum, int r
     build_index();
     total_block_number=insert_entry(value->value,value->type,destine_blocknum,destine_offset,total_block_number);
     *(intp) = total_block_number;
-    intp++;											//Èç¹ûÓĞĞÂÔö¼ÓÒ³½Úµã£¬indexÎÄ¼şµÄµÚ0¿éĞèÒª¸üĞÂ
+    intp++;											//å¦‚æœæœ‰æ–°å¢åŠ é¡µèŠ‚ç‚¹ï¼Œindexæ–‡ä»¶çš„ç¬¬0å—éœ€è¦æ›´æ–°
     *(intp) = this->m_blocknumber;
     m_ptheblocks[blocknumber].written_block();
     m_ptheblocks[blocknumber].used_block();
     //
     save_index();
     freespace();
-	/*Ô­À´µÄ´úÂë¡£¡£¡£¡£¡£¡£¡£¡£¡£
-	blocknumber=get_block(INDEX,this_index,0);
-	p=m_ptheblocks[blocknumber].m_address;
-	intp=(int*)p;
-	total_block_number=*intp;
-	intp++;
-	start_block=*intp;
-	if(total_block_number==1)
-	{
-		intp--;
-		(*intp)++;
-		intp++;
-		*intp=1;
-		start_block=*intp;
-
-		m_ptheblocks[blocknumber].written_block();
-		m_ptheblocks[blocknumber].used_block();
-		blocknumber=get_block(INDEX,this_index,1);
-		p=m_ptheblocks[blocknumber].m_address;
-		for(temp=p;temp<p+BLOCK_SIZE;temp++)
-			*temp='$';
-		intp=(int*)p;
-		*intp=1;//HEADÖĞµÄ¿éºÅ
-		intp++;
-		*intp=1;//HEADÖĞµÄCOUNT
-		intp++;
-		*intp=-1;//ÏÂÒ»¿éµÄ¿éºÅ
-		p=m_ptheblocks[blocknumber].m_address+12;//integer ÀàĞÍÊÇ4¸öbyte, ¿éÍ·´æ´¢Èı¸öÕûÊı
-		strcpy(p,value->value);
-		//Ğ´NODE
-		p=m_ptheblocks[blocknumber].m_address+INDEX_RECORD_LEN;
-		intp=(int*)p;
-		*intp=destine_blocknum;//¼ÇÂ¼Ò¶½ÚµãµÄ¿éºÅ
-		intp++;
-        *intp=destine_offset;//¼ÇÂ¼Ò¶½ÚµãµÄ¼ÇÂ¼µÄÆ«ÒÆµØÖ·
-		p=p+8;
-		strcpy(p,value->value);
-		
-		m_ptheblocks[blocknumber].written_block();
-		m_ptheblocks[blocknumber].used_block();
-		return 1;
-	}
-	else
-	{
-	save_number=0;
-	blocknumber=get_block( INDEX,this_index,start_block);
-	if(blocknumber==-1)
-	{
-	    printf("memory access error");
-	    return 0;
-	}
-	p=m_ptheblocks[blocknumber].m_address+12;//¿éºÅ£¬ count, ÏÂÒ»¸ö¿éºÅ
-	while(keycompare(value->value,p,value->type)==1)
-	{
-		intp=(int*)m_ptheblocks[blocknumber].m_address;
-		save_number=*intp;
-		intp=intp+2;
-		nextblock=*intp;
-		m_ptheblocks[blocknumber].used_block();
-		if(nextblock==-1)
-		    break;
-		blocknumber=get_block(INDEX,this_index,nextblock);
-		if(blocknumber==-1)
-		{
-			printf("memory access error");
-			return 0;
-		}
-		p=m_ptheblocks[blocknumber].m_address+12;
-	}
-	m_ptheblocks[blocknumber].used_block();
-	if(save_number==0)
-	{
-		newblock=get_block(INDEX,this_index,total_block_number);
-		first_block=get_block(INDEX,this_index,0);
-		total_block_number++;
-		p2=m_ptheblocks[first_block].m_address;
-		intp2=(int*)p2;
-		(*intp2)++; //µÚ0¿éÖĞµÄ¿é×ÜÊı¼ÓÒ»
-		intp2++;
-		nextblock=*intp2;//¼ÇÂ¼Ö®Ç°µÄ¿ªÊ¼¿éºÅ
-		*intp2=m_ptheblocks[newblock].m_offset_number;
-
-		m_ptheblocks[first_block].written_block();
-		m_ptheblocks[first_block].used_block();
-		//ºÍĞ´ĞÂ¿ìÒ»ÑùµÄ²½Öè
-		p1=m_ptheblocks[newblock].m_address;
-		for(temp=p1;temp<p1+BLOCK_SIZE;temp++)
-			*temp='$';
-		//Ğ´ĞÂ¿éµÄHEAD
-		intp1=(int*)p1;
-		*intp1=m_ptheblocks[newblock].m_offset_number;//HEADÖĞµÄ¿éºÅ
-		intp1++;
-		*intp1=1;//HEADÖĞµÄCOUNT
-		intp1++;
-		*intp1=nextblock;//ÏÂÒ»¿éµÄ¿éºÅ????????????
-		p1=m_ptheblocks[newblock].m_address+12;
-		strcpy(p1,value->value);
-		//Ğ´NODE
-		p1=m_ptheblocks[newblock].m_address+INDEX_RECORD_LEN;
-		intp1=(int*)p1;
-		*intp1=destine_blocknum;
-		intp1++;
-        *intp1=destine_offset;
-		p1=p1+8;
-		strcpy(p1,value->value);
-		
-		m_ptheblocks[newblock].written_block();
-		m_ptheblocks[newblock].used_block();
-		return 1;
-	}
-	//save_numberÊÇÄ¿±êµÄ¿é,nextblockÊÇÆäÏÂÒ»¿é
-	blocknumber=get_block(INDEX,this_index,save_number);
-	p=m_ptheblocks[blocknumber].m_address;
-	intp=(int*)p;
-	intp++;
-	if(*intp<31)    //¿éÖĞ¿Õ¼ä×ã¹»ĞÂÔö¼ÇÂ¼
-	{
-		for(p1=p+INDEX_RECORD_LEN;*p1!='$';p1=p1+INDEX_RECORD_LEN)//ÕÒµ½¿ÕÎ»ÖÃ
-		;
-		if(p1>=m_ptheblocks[blocknumber].m_address+BLOCK_SIZE)
-		{
-			printf("error:this m_ptheblocks is already full\n");
-			return 0;
-		}
-		intp1=(int*)p1;
-		*intp1=destine_blocknum;
-		intp1++;
-		*intp1=destine_offset;
-		temp=p1+8;
-		strcpy(temp,value->value);
-		(*intp)++;                         //count++
-
-		m_ptheblocks[blocknumber].written_block();
-		m_ptheblocks[blocknumber].used_block();
-
-		return 1;
-	}
-	else
-	{
-        firstblock=get_block(INDEX,this_index,0);
-		p1=m_ptheblocks[firstblock].m_address;
-		intp1=(int*)p1;
-        newblocknumber=*intp1;//ÒòÎª´Ó0ËãÆğ£¬²î¸ö1
-		*intp1++;
-	
-		m_ptheblocks[firstblock].written_block();
-		m_ptheblocks[firstblock].used_block();
-		newblock=get_block(INDEX,this_index,newblocknumber);
-		p1=m_ptheblocks[newblock].m_address;
-		for(temp=p1;temp<p1+BLOCK_SIZE;temp++)
-			*temp='$';
-		//Ğ´ĞÂ¿éµÄHEAD
-		intp1=(int*)p1;
-		*intp1=newblocknumber;//HEADÖĞµÄ¿éºÅ
-		intp1++;
-		*intp1=1;//HEADÖĞµÄCOUNT
-		intp1++;
-		*intp1=nextblock;//ÏÂÒ»¿éµÄ¿éºÅ
-		p1=m_ptheblocks[newblock].m_address+12;
-		strcpy(p1,value->value);
-		//Ğ´NODE
-		p1=m_ptheblocks[newblock].m_address+INDEX_RECORD_LEN;
-		intp1=(int*)p1;
-		*intp1=destine_blocknum;
-		intp1++;
-        *intp1=destine_offset;
-		p1=p1+8;
-		strcpy(p1,value->value);
-	
-		m_ptheblocks[newblock].written_block();
-		m_ptheblocks[newblock].used_block();
-		
-		intp++;
-		*intp=newblocknumber;//¸Õ²ÅÂúµÄÄÇ¿éµÄÏÂÒ»¿éÓ¦¸ÃÊÇÕâ¸öĞÂ¿é
-	
-		m_ptheblocks[blocknumber].written_block();
-		m_ptheblocks[blocknumber].used_block();
-
-  		return 1;
-
-	}
-	return 0;
-	}*/
+    return !!total_block_number;
 }

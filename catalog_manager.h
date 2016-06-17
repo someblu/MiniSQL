@@ -48,26 +48,26 @@ public:
 	void ReadCatalog();
 	void UpdateCatalog();
 
-	short int IsTableExists(const char* tablename);
-	short int DeleteTableInfo(const char* tablename);
-	short int IsIndexExists(const char* indexname);
-	short int DeleteIndexInfo(const char* indexname);
-	short int IsAttrExists(const char* tablename, const char* attrname);
-	short int GetAttrTypeByName(const char* tablename, const char* attrname);
-	short int GetAttrTypeByNum(const char* tablename, unsigned int attrnum);
-	unsigned int GetAttrOffset(const char* tablename, const char* attrname);
-	unsigned int GetAttrLength(const char* tablename, const char* attrname);
-	unsigned int GetRecordLength(const char* tablename);
-	short int IsIndexCreated(const char* tablename, const char* attrname);
-	const char* GetIndexName(const char* tablename, const char* attrname);
-	unsigned int GetAttrNum(const char* tablename);
-	short int GetAttrInfo(const char* tablename, unsigned int attrnum, column *tempcol);
-	short int CreateTableInfo(const char* tablename, column *cols);
-	short int CreateIndexInfo(const char* indexname, const char* tablename, column *cols);
-	short int IsAttrUnique(const char* tablename, const char* attrname);
-	unsigned int GetRecordNumber(const char* tablename);
-	void RecordNumDel(const char* tablename, unsigned int deleted);
-	void RecordNumAdd(const char* tablename, unsigned int added);
+	short int IsTableExists(string tablename);
+	short int DeleteTableInfo(string tablename);
+	short int IsIndexExists(string indexname);
+	short int DeleteIndexInfo(string indexname);
+	short int IsAttrExists(string tablename, string attrname);
+	short int GetAttrTypeByName(string tablename, string attrname);
+	short int GetAttrTypeByNum(string tablename, unsigned int attrnum);
+	unsigned int GetAttrOffset(string tablename, string attrname);
+	unsigned int GetAttrLength(string tablename, string attrname);
+	unsigned int GetRecordLength(string tablename);
+	short int IsIndexCreated(string tablename, string attrname);
+	string GetIndexName(string tablename, string attrname);
+	unsigned int GetAttrNum(string tablename);
+	short int GetAttrInfo(string tablename, unsigned int attrnum, column *tempcol);
+	short int CreateTableInfo(string tablename, column *cols);
+	short int CreateIndexInfo(string indexname, string tablename, column *cols);
+	short int IsAttrUnique(string tablename, string attrname);
+	unsigned int GetRecordNumber(string tablename);
+	void RecordNumDel(string tablename, unsigned int deleted);
+	void RecordNumAdd(string tablename, unsigned int added);
 
 protected:
 	TablePointer m_tablehead;				//表的链表的头部指针

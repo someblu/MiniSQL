@@ -320,7 +320,7 @@ void CCatalogManager::UpdateCatalog()
 	}
 }
 
-short int CCatalogManager::IsTableExists(const char* tablename)
+short int CCatalogManager::IsTableExists(string tablename)
 {
 	TablePointer ptrTable  = m_tablehead;
 	
@@ -334,7 +334,7 @@ short int CCatalogManager::IsTableExists(const char* tablename)
 	return 0;
 }
 
-short int CCatalogManager::DeleteTableInfo(const char* tablename)
+short int CCatalogManager::DeleteTableInfo(string tablename)
 {
 	int i = 0;
 	TablePointer ptrTable  = m_tablehead;
@@ -374,7 +374,7 @@ short int CCatalogManager::DeleteTableInfo(const char* tablename)
 	return 0;
 }
 
-short int CCatalogManager::IsIndexExists(const char* indexname)
+short int CCatalogManager::IsIndexExists(string indexname)
 {
 	IndexPointer ptrIndex = m_indextail;
 
@@ -388,7 +388,7 @@ short int CCatalogManager::IsIndexExists(const char* indexname)
 	return 0;
 }
 
-short int CCatalogManager::DeleteIndexInfo(const char* indexname)
+short int CCatalogManager::DeleteIndexInfo(string indexname)
 {
 	IndexPointer ptrIndex  = m_indextail;
 	IndexPointer temp = m_indextail;
@@ -425,7 +425,7 @@ short int CCatalogManager::DeleteIndexInfo(const char* indexname)
 	return 0;
 }
 
-short int CCatalogManager::IsAttrExists(const char* tablename, const char* attrname)
+short int CCatalogManager::IsAttrExists(string tablename, string attrname)
 {
 	if(IsTableExists(tablename) == 1)
 	{
@@ -455,7 +455,7 @@ short int CCatalogManager::IsAttrExists(const char* tablename, const char* attrn
 	return 0;
 }
 
-short int CCatalogManager::GetAttrTypeByName(const char* tablename, const char* attrname)
+short int CCatalogManager::GetAttrTypeByName(string tablename, string attrname)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;
@@ -489,7 +489,7 @@ short int CCatalogManager::GetAttrTypeByName(const char* tablename, const char* 
 	return 0;
 }
 
-short int CCatalogManager::GetAttrTypeByNum(const char* tablename, unsigned int attrnum)
+short int CCatalogManager::GetAttrTypeByNum(string tablename, unsigned int attrnum)
 {
 	int i = 0;
 	TablePointer ptrTable  = m_tablehead;
@@ -523,7 +523,7 @@ short int CCatalogManager::GetAttrTypeByNum(const char* tablename, unsigned int 
 	return 0;
 }
 
-unsigned int CCatalogManager::GetAttrOffset(const char* tablename, const char* attrname)
+unsigned int CCatalogManager::GetAttrOffset(string tablename, string attrname)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;
@@ -557,7 +557,7 @@ unsigned int CCatalogManager::GetAttrOffset(const char* tablename, const char* a
 	return 0;
 }
 
-unsigned int CCatalogManager::GetAttrLength(const char* tablename, const char* attrname)
+unsigned int CCatalogManager::GetAttrLength(string tablename, string attrname)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;
@@ -591,7 +591,7 @@ unsigned int CCatalogManager::GetAttrLength(const char* tablename, const char* a
 	return 0;
 }
 
-unsigned int CCatalogManager::GetRecordLength(const char* tablename)
+unsigned int CCatalogManager::GetRecordLength(string tablename)
 {
 	int len = 0;
 	TablePointer ptrTable  = m_tablehead;
@@ -625,7 +625,7 @@ unsigned int CCatalogManager::GetRecordLength(const char* tablename)
 	return 0;
 }
 
-short int CCatalogManager::IsIndexCreated(const char* tablename, const char* attrname)
+short int CCatalogManager::IsIndexCreated(string tablename, string attrname)
 {
 	IndexPointer ptrIndex = m_indextail;
 	
@@ -640,7 +640,7 @@ short int CCatalogManager::IsIndexCreated(const char* tablename, const char* att
 	return 0;
 }
 
-const char* CCatalogManager::GetIndexName(const char* tablename, const char* attrname)
+string CCatalogManager::GetIndexName(string tablename, string attrname)
 {
 	IndexPointer ptrIndex = m_indextail;
 
@@ -657,10 +657,10 @@ const char* CCatalogManager::GetIndexName(const char* tablename, const char* att
 			ptrIndex = ptrIndex->Next;
 	}
 
-	return (const char*)("");
+	return (string)("");
 }
 
-unsigned int CCatalogManager::GetAttrNum(const char* tablename)
+unsigned int CCatalogManager::GetAttrNum(string tablename)
 {
 	int num = 0;
 	TablePointer ptrTable  = m_tablehead;
@@ -690,7 +690,7 @@ unsigned int CCatalogManager::GetAttrNum(const char* tablename)
 	return 0;
 }
 
-short int CCatalogManager::GetAttrInfo(const char* tablename, unsigned int attrnum, column* tempcol)
+short int CCatalogManager::GetAttrInfo(string tablename, unsigned int attrnum, column* tempcol)
 {
 	int i = 0;
 	TablePointer ptrTable  = m_tablehead;
@@ -731,7 +731,7 @@ short int CCatalogManager::GetAttrInfo(const char* tablename, unsigned int attrn
 	return 0;
 }
 
-short int CCatalogManager::CreateTableInfo(const char* tablename, column* cols)
+short int CCatalogManager::CreateTableInfo(string tablename, column* cols)
 {
 	AttrPointer ptrAttr = NULL;	
 	column* temp = cols;									//保存初始列指针
@@ -814,7 +814,7 @@ short int CCatalogManager::CreateTableInfo(const char* tablename, column* cols)
 	return 1;
 }
 
-short int CCatalogManager::CreateIndexInfo(const char* indexname, const char* tablename, column* cols)
+short int CCatalogManager::CreateIndexInfo(string indexname, string tablename, column* cols)
 {
 	IndexPointer ptrIndex = new IndexNode;
 	
@@ -837,7 +837,7 @@ short int CCatalogManager::CreateIndexInfo(const char* indexname, const char* ta
 	return 1;
 }
 
-short int CCatalogManager::IsAttrUnique(const char* tablename, const char* attrname)
+short int CCatalogManager::IsAttrUnique(string tablename, string attrname)
 {
 	TablePointer ptrTable = m_tablehead;
 	TablePointer temp = NULL;
@@ -877,7 +877,7 @@ short int CCatalogManager::IsAttrUnique(const char* tablename, const char* attrn
 	return 0;
 }
 
-unsigned int CCatalogManager::GetRecordNumber(const char* tablename)
+unsigned int CCatalogManager::GetRecordNumber(string tablename)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;
@@ -900,7 +900,7 @@ unsigned int CCatalogManager::GetRecordNumber(const char* tablename)
 	return 0;
 }
 
-void CCatalogManager::RecordNumDel(const char* tablename, unsigned int deleted)
+void CCatalogManager::RecordNumDel(string tablename, unsigned int deleted)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;
@@ -922,7 +922,7 @@ void CCatalogManager::RecordNumDel(const char* tablename, unsigned int deleted)
 	}
 }
 
-void CCatalogManager::RecordNumAdd(const char* tablename, unsigned int added)
+void CCatalogManager::RecordNumAdd(string tablename, unsigned int added)
 {
 	TablePointer ptrTable  = m_tablehead;
 	TablePointer temp = NULL;

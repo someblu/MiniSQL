@@ -10,8 +10,8 @@ using namespace std;
 
 typedef struct struct_unit_node
 {
-	int block_number;//ÕâÌõ¼ÍÂ¼ÊÇµÚ¼¸¿éµÄ
-	int offset_in_block;//´Ó1¿ªÊ¼Ëã
+	int block_number;//è¿™æ¡çºªå½•æ˜¯ç¬¬å‡ å—çš„
+	int offset_in_block;//ä»1å¼€å§‹ç®—
 	char key[VALUE_LENGTH];
 	struct struct_unit_node *next;
 }unit_node;
@@ -24,8 +24,8 @@ public:
 
 	CIndexManager(){}
 	CIndexManager(string indexname, string tablename){
-		m_tablename = tablename;
-		m_indexname = indexname;
+		m_tablename = (LPCTSTR)tablename;
+		m_indexname = (LPCTSTR)indexname;
 	}
 	~CIndexManager(){}
 
@@ -36,12 +36,12 @@ public:
 	int keycompare(char *a,char *b, int tag);
 
 protected:
-	int m_blocknumber;  //¿éºÅ
-	int m_count;        //½ÚµãÖĞ×Ü¼ÇÂ¼Êı
-	CIndexManager *m_next;//Ö¸ÏòÏÂÒ»¸ö½Úµã
-	unit_node *m_first;   //Ö¸ÏòµÚÒ»Ìõ¼ÇÂ¼
-	char m_minkey[VALUE_LENGTH];//¸Ã½ÚµãÖĞ×îĞ¡Öµ
-	int m_next_block_number; //ÏÂÒ»¸ö½ÚµãµÄ¿éºÅ
+	int m_blocknumber;  //å—å·
+	int m_count;        //èŠ‚ç‚¹ä¸­æ€»è®°å½•æ•°
+	CIndexManager *m_next;//æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
+	unit_node *m_first;   //æŒ‡å‘ç¬¬ä¸€æ¡è®°å½•
+	char m_minkey[VALUE_LENGTH];//è¯¥èŠ‚ç‚¹ä¸­æœ€å°å€¼
+	int m_next_block_number; //ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„å—å·
 
 	void freespace();
 	int save_index();
