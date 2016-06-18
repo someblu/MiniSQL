@@ -1,5 +1,3 @@
-
-
 #include "index_manager.h"
 
 using namespace std;
@@ -338,7 +336,7 @@ int CIndexManager::build_index(){
         m_ptheblocks[current_block].written_block();
 		m_ptheblocks[current_block].used_block();
 		//.........
-		if((block_count+1)<total_idxblock_number)
+		if((block_no+1)<total_idxblock_number)
 			currenthead = currenthead->m_next;
 		else{
 			delete newnode;                   //删除最后一个没有存数据的index manager
@@ -372,7 +370,7 @@ void CIndexManager::freespace()           //清空用来暂时存储数据的b+�
 
 int CIndexManager::SelectIndex(condition *conds, column *cols, unsigned int recordlen)
 {
-	CString this_table,this_index;
+	string this_table,this_index;
     int blocknumber,block_save,nextblock_number,recordblock;
 	char *p,*min_key,*key,*attr_p;
 	char *recordpoint;
@@ -501,8 +499,8 @@ int CIndexManager::DeleteIndex(condition *conds,unsigned int recordlen)
     	pre_head = head_save;
 		head_save=currenthead;
     }
-	currentnode = head_save->m_first;
-	for(currentnode!=NULL;currentnode=currentnode->next)
+
+	for(currentnode = head_save->m_first;currentnode!=NULL;currentnode=currentnode->next)
     {
 		if(strcmp(conds->value,currentnode->key)==1 )
         {
@@ -516,7 +514,7 @@ int CIndexManager::DeleteIndex(condition *conds,unsigned int recordlen)
             strcpy(head_save->m_minkey,tempnode->key);
             while(tempnode!=NULL)
             {
-                if(keycompare(head_save->m_minkey,tempnode->key) == 1 && tempnode!=currentnode)
+                if(keycompare(head_save->m_minkey,tempnode->key,conds->type) == 1 && tempnode!=currentnode)
                     strcpy(head_save->m_minkey,tempnode->key);
                 tempnode=tempnode->next;
             }
@@ -572,7 +570,7 @@ int CIndexManager::DeleteIndex(condition *conds,unsigned int recordlen)
 	            intp=(int*)p;
 	            *intp--;//total_block_number--
 	            m_ptheblocks[blocknumber].written_block();
-	            m_ptheblocks[block_count].used_block();
+	            m_ptheblocks[blocknumber].used_block();
 
 				if(pre_head!=currenthead)
 				{

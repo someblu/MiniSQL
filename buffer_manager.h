@@ -1,9 +1,7 @@
 #ifndef __buffer_h__
 #define __buffer_h__
+#pragma once
 
-#include <iostream> 
-#include <string>
-#include <fstream>
 #include "MiniSQL.h"
 //#define TABLE 1					//用来标记块中存的是table数据
 //#define INDEX 2					//用来标记块中存的是index数据

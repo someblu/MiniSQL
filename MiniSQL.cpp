@@ -1,9 +1,8 @@
 // MiniSQL.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include "MiniSQL.h"
-#include "interpret.h"
+//#include "interpret.h"
 #include "catalog_manager.h"
 #include "buffer_manager.h"
 
@@ -14,9 +13,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// The one and only application object
 
-CWinApp theApp;
 CCatalogManager Catalog;
 
 using namespace std;
@@ -45,63 +42,45 @@ short int IsComEnd(char *input)
 	return 0;
 }
 
-int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
+int main(int argc, const char* argv[], const char* envp[])
 {
-	int nRetCode = 0;
+	char command[COMLEN] = "";
+	char input[INPUTLEN] = "";
+	char word[WORDLEN] = "";
+	short int ComEnd = 0;
+//	CInterpret parsetree;
 
-	// initialize MFC and print and error on failure
-	if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0))
-	{
-		// TODO: change error code to suit your needs
-		cerr << _T("Fatal Error: MFC initialization failed") << endl;
-		nRetCode = 1;
-	}
-	else
-	{
-		// TODO: code your application's behavior here.
-		//	CString strHello;
-		//	strHello.LoadString(IDS_HELLO);
-		//	cout << (LPCTSTR)strHello << endl;
-	
-		char command[COMLEN] = "";
-		char input[INPUTLEN] = "";
-		char word[WORDLEN] = "";
-		short int ComEnd = 0;
-		CInterpret parsetree;
-		
-		cout << endl
-		 << "         _       __  ______  __     ______  ____    __  ___  ______   " << endl                                                                         
-		 << "        | |     / / / ____/ / /    / ____/ / __ \\  /  |/  / / ____/  "  << endl                                                                       
-		 << "        | | /| / / / __/   / /    / /     / / / / / /|_/ / / __/      " <<   endl                                                                          
-		 << "        | |/ |/ / / /___  / /___ / /___  / /_/ / / /  / / / /___      " <<   endl                                                                          
-		 << "        |__/|__/ /_____/ /_____/ \\____/  \\____/ /_/  /_/ /_____/    " << endl << endl ;                                                                       
-                                                                            
-		cout <<"  *************************************************************************" << endl
-		 <<"  **                         Welcom to MiniSQL!                          **" << endl
-		 <<"  **                    Copyright by 陈玮 吴斌 黄欣 程恒奇               **" <<endl
-		 <<"  **              Chukezhen honours College 2002 Mixedclass Team         **" << endl             
-		 <<"  *************************************************************************" << endl << endl;
+	cout << endl
+	 << "         _       __  ______  __     ______  ____    __  ___  ______   " << endl
+	 << "        | |     / / / ____/ / /    / ____/ / __ \\  /  |/  / / ____/  "  << endl
+	 << "        | | /| / / / __/   / /    / /     / / / / / /|_/ / / __/      " <<   endl
+	 << "        | |/ |/ / / /___  / /___ / /___  / /_/ / / /  / / / /___      " <<   endl
+	 << "        |__/|__/ /_____/ /_____/ \\____/  \\____/ /_/  /_/ /_____/    " << endl << endl ;
 
-		Catalog.ReadCatalog();
-		CBufferManager::initiate_blocks();
-		while(1)
+	cout <<"  *************************************************************************" << endl
+	 <<"  **                         Welcom to MiniSQL!                          **" << endl
+	 <<"  **                    Copyright by 陈玮 吴斌 黄欣 程恒奇               **" <<endl
+	 <<"  **              Chukezhen honours College 2002 Mixedclass Team         **" << endl
+	 <<"  *************************************************************************" << endl << endl;
+
+	Catalog.ReadCatalog();
+	CBufferManager::initiate_blocks();
+	while(1)
+	{
+		strcpy(command, "");//command清零
+		ComEnd = 0;
+
+		while(!ComEnd)
 		{
-			strcpy(command, "");//command清零
-			ComEnd = 0;
-				
-			while(!ComEnd)
-			{
-				printf("mini>> ");
-				gets(input);
-				if(IsComEnd(input))
-					ComEnd = 1;
-				strcat(command, input);
-				AddSeperator(command);
-			}
-			parsetree.Parse(command);
-			parsetree.Execute();
+			printf("mini>> ");
+			gets(input);
+			if(IsComEnd(input))
+				ComEnd = 1;
+			strcat(command, input);
+			AddSeperator(command);
 		}
+//		parsetree.Parse(command);
+//		parsetree.Execute();
 	}
-	return nRetCode;
+	return 0;
 }
-

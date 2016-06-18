@@ -1,10 +1,9 @@
 #ifndef __index_h__
 #define __index_h__
+#pragma once
 
 #include "MiniSQL.h"
 #include "buffer_manager.h"
-#include <iostream>
-#include <string>
 
 using namespace std;
 
@@ -24,8 +23,8 @@ public:
 
 	CIndexManager(){}
 	CIndexManager(string indexname, string tablename){
-		m_tablename = (LPCTSTR)tablename;
-		m_indexname = (LPCTSTR)indexname;
+		m_tablename = tablename;
+		m_indexname = indexname;
 	}
 	~CIndexManager(){}
 
