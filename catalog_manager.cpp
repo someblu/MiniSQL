@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "MiniSQL.h"
 #include "catalog_manager.h"
 
@@ -173,7 +172,7 @@ void CCatalogManager::UpdateCatalog()
 {
 	char buffer[100];
 	FILE* fp;
-		
+
 	if(m_tablehead != NULL){							//如果为空，说明.cat文件刚被readcatalog建立 
 														//所以不需要写回
 

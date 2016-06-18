@@ -1,13 +1,7 @@
-//#if !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)
-//#define AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_
+#pragma once
 
-//#if _MSC_VER > 1000
-//#pragma once
-//#endif // _MSC_VER > 1000
+#define _CRT_SECURE_NO_WARNINGS
 
-//#include "resource.h"
-
-#define _CRT_SECURE_NO_WARNINGS    
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -17,13 +11,13 @@
 
 //Macro definitions
 //Buffer Manager
-#define TABLE 1					//�������ǿ��д�����table����
-#define INDEX 2					//�������ǿ��д�����index����
-#define MAP 3					//�������ǿ��д�����map����
+#define TABLE 1					//用来标记块中存的是table数据
+#define INDEX 2					//用来标记块中存的是index数据
+#define MAP 3					//用来标记块中存的是map数据
 
-#define MAX_BLOCKS 1024		//buffer�����ܿ���
-#define BLOCK_SIZE 8192			//ÿ�����ֽ���
-#define NAME_SIZE  100			//�ļ����Ĵ�С
+#define MAX_BLOCKS 1024		//buffer区内总块数
+#define BLOCK_SIZE 8192			//每块的字节数
+#define NAME_SIZE  100			//文件名的大小
 //Buffer Manager
 
 //Index Manager
@@ -80,37 +74,35 @@
 #define FLOATLEN	20
 #define NAMELEN		100
 
-//��Ӧ�����е�һ�У���һ������
+//对应表格中的一列，即一个属性
 typedef struct struct_column
 {
-	char colname[NAMELEN];		//������
-	short int type;				//���Ե����ͣ�INT,CHAR��FLOAT
-	unsigned int coloffset;		//������һ����¼�е�offset,���ֽ�Ϊ��λ
-	unsigned int collength;		//���Եĳ��ȣ����ֽ�Ϊ��λ
-	struct struct_column *next;			//��һ���ԣ��ڽ�����������ΪNULL
-	short int IsPrimary;		//�������Ƿ�Ϊprimary key
-	short int IsUnique;			//����������Ϊunique
+	char colname[NAMELEN];		//属性名
+	short int type;				//属性的类型，INT,CHAR或FLOAT
+	unsigned int coloffset;		//属性在一条记录中的offset,以字节为单位
+	unsigned int collength;		//属性的长度，以字节为单位
+	struct struct_column *next;			//下一属性，在建索引命令中为NULL
+	short int IsPrimary;		//该属性是否为primary key
+	short int IsUnique;			//该属性书否为unique
 }column;
 
-//��Ӧwhere�����е�һ��,��һ������
+//对应where语句中的一项,即一个条件
 typedef struct struct_condition
 {
-	char attrname[NAMELEN];		//������
-	unsigned int cond;			//�Ƚ�����,LT,GT,QU,NE,LE,GE��һ��
-	char value[255];			//�μӱȽϵĳ���
-	short int type;				//�����Ե�����,���Ǳ�Ҫ��,��Ϊ���ֺ��ַ����ȽϷ�����һ��
-	unsigned int attroffset;	//������һ����¼�е�offset,���ֽ�Ϊ��λ
-	unsigned int attrlength;	//���Եĳ��ȣ����ֽ�Ϊ��λ
-	struct struct_condition *next;		//��һ������
-}condition;	
+	char attrname[NAMELEN];		//属性名
+	unsigned int cond;			//比较条件,LT,GT,QU,NE,LE,GE中一种
+	char value[255];			//参加比较的常数
+	short int type;				//该属性的类型,这是必要的,因为数字和字符串比较方法不一样
+	unsigned int attroffset;	//属性在一条记录中的offset,以字节为单位
+	unsigned int attrlength;	//属性的长度，以字节为单位
+	struct struct_condition *next;		//下一个条件
+}condition;
 
-//��Ӧinsert into�����е�һ��������(����һ����¼!!)
+//对应insert into语句中的一个插入项(不是一条记录!!)
 typedef struct struct_insertvalue
 {
-	char value[VALLEN];			//������ֵ
-	short int type;				//������ֵ����,��interpret��һ��ֻ�������ж�CHAR��NOTCHAR
-	unsigned int length;		//ֵ����
-	struct struct_insertvalue *next;	//��һ��ֵ
+	char value[VALLEN];			//插入的值
+	short int type;				//插入的值类型,在interpret这一步只能做到判断CHAR或NOTCHAR
+	unsigned int length;		//值长度
+	struct struct_insertvalue *next;	//下一个值
 }insertvalue;
-
-//#endif // !defined(AFX_MINISQL_H__40FC0CD6_696B_4458_A61E_F4437538AA22__INCLUDED_)

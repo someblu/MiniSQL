@@ -1,5 +1,6 @@
 #ifndef __record_h__
 #define __record_h__
+#pragma once
 
 #include "MiniSQL.h"
 #include "buffer_manager.h"

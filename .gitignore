@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+# Clion
+CMakeLists.txt
+.idea/

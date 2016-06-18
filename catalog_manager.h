@@ -1,7 +1,10 @@
 #ifndef __catalog_h__
 #define __catalog_h__
+#pragma once
 
 #include "MiniSQL.h"
+
+using namespace std;
 
 typedef struct struct_AttrNode* AttrPointer;
 typedef struct struct_AttrNode
@@ -76,7 +79,5 @@ protected:
 	IndexPointer m_indextail;				//索引的链表的尾部指针
 
 };
-
-//CCatalogManager Catalog;
 
 #endif
