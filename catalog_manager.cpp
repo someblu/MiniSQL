@@ -20,7 +20,7 @@ void CCatalogManager::ReadCatalog()
 	IndexPointer ptrIndex = NULL;				//索引的链表的移动指针
 
 	m_tablehead = m_tabletail = NULL;
-	m_indextail = m_indextail = NULL;
+	m_indexhead = m_indextail = NULL;
 
 	//创建表的链表
 
@@ -43,7 +43,7 @@ void CCatalogManager::ReadCatalog()
 			ptrTable = m_tablehead;
 			ptrTable->AllAttrs = NULL;
 			ptrTable->Next = NULL;
-			m_tabletail = m_tablehead;
+			m_tabletail = ptrTable;
 
 			tag = 1;
 		}
@@ -137,11 +137,11 @@ void CCatalogManager::ReadCatalog()
 	{
 		if(tagI==0)
 		{
-			m_indextail = new IndexNode;
+			m_indexhead = new IndexNode;
 
-			ptrIndex = m_indextail;		
+			ptrIndex = m_indexhead;
 			ptrIndex->Next = NULL;
-			m_indextail = m_indextail;			
+			m_indextail = ptrIndex;
 
 			tagI = 1;
 		}
@@ -178,7 +178,7 @@ void CCatalogManager::UpdateCatalog()
 
 	TablePointer ptrTable = m_tablehead;				//表的链表的移动指针
 	AttrPointer ptrAttr = ptrTable->AllAttrs;			//属性的链表的移动指针
-	IndexPointer ptrIndex = m_indextail;				//索引的链表的移动指针
+	IndexPointer ptrIndex = m_indexhead;				//索引的链表的移动指针
 	
 	TablePointer tempT = ptrTable;						//删除表的链表时
 	AttrPointer tempA = ptrAttr;						//用到的临时指针
@@ -308,7 +308,7 @@ void CCatalogManager::UpdateCatalog()
 
 	//free the index_list memory
 
-	ptrIndex = m_indextail;
+	ptrIndex = m_indexhead;
 
 	while(ptrIndex != NULL)
 	{
@@ -375,7 +375,7 @@ short int CCatalogManager::DeleteTableInfo(const char* tablename)
 
 short int CCatalogManager::IsIndexExists(const char* indexname)
 {
-	IndexPointer ptrIndex = m_indextail;
+	IndexPointer ptrIndex = m_indexhead;
 
 	while(ptrIndex != NULL)
 	{
@@ -389,15 +389,15 @@ short int CCatalogManager::IsIndexExists(const char* indexname)
 
 short int CCatalogManager::DeleteIndexInfo(const char* indexname)
 {
-	IndexPointer ptrIndex  = m_indextail;
-	IndexPointer temp = m_indextail;
+	IndexPointer ptrIndex  = m_indexhead;
+	IndexPointer temp = m_indexhead;
 	while(ptrIndex != NULL)
 	{
 		if(strcmp(ptrIndex->TableName,indexname) == 0)
 		{
-			if(ptrIndex == m_indextail)
+			if(ptrIndex == m_indexhead)
 			{
-				m_indextail = ptrIndex->Next;
+				m_indexhead = ptrIndex->Next;
 				delete ptrIndex;
 				return 1;
 			}
@@ -626,7 +626,7 @@ unsigned int CCatalogManager::GetRecordLength(const char* tablename)
 
 short int CCatalogManager::IsIndexCreated(const char* tablename, const char* attrname)
 {
-	IndexPointer ptrIndex = m_indextail;
+	IndexPointer ptrIndex = m_indexhead;
 	
 	while(ptrIndex != NULL)
 	{
@@ -641,7 +641,7 @@ short int CCatalogManager::IsIndexCreated(const char* tablename, const char* att
 
 const char* CCatalogManager::GetIndexName(const char* tablename, const char* attrname)
 {
-	IndexPointer ptrIndex = m_indextail;
+	IndexPointer ptrIndex = m_indexhead;
 
 	while(ptrIndex != NULL)
 	{
