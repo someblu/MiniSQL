@@ -12,7 +12,7 @@ using namespace std;
 //static CCatalogManager* m_pCatalog = new CCatalogManager;
 extern CCatalogManager Catalog;
 
-//³õÊ¼»¯ column ½á¹¹
+//åˆå§‹åŒ– column ç»“æ„
 void CInterpret::initcol(column *p)
 {
 	strcpy(p -> colname, "");
@@ -24,7 +24,7 @@ void CInterpret::initcol(column *p)
 	p -> collength = 0;
 }
 
-//³õÊ¼»¯ condition ½á¹¹
+//åˆå§‹åŒ– condition ç»“æ„
 void CInterpret::initcond(condition *p)
 {
 	strcpy(p -> attrname, "");
@@ -36,7 +36,7 @@ void CInterpret::initcond(condition *p)
 	p -> type = 0;
 }
 
-//³õÊ¼»¯ insertvalue ½á¹¹
+//åˆå§‹åŒ– insertvalue ç»“æ„
 void CInterpret::initvalue(insertvalue *p)
 {
 	p -> type = 0;
@@ -45,7 +45,7 @@ void CInterpret::initvalue(insertvalue *p)
 	p -> length = 0;
 }
 
-//´Ó src ºÍ des ÖĞ»ñÈ¡Ò»¸ö×Ö
+//ä» src å’Œ des ä¸­è·å–ä¸€ä¸ªå­—
 bool CInterpret::GetWord(string& src, string& des)
 {
 	unsigned int srcpos = 0, despos = 0;
@@ -142,7 +142,7 @@ bool CInterpret::GetStr(string& src, string& des)
 	return false;
 }
 
-//·ÖÎöÃüÁî£¬²¢·µ»Ø½âÎöÊ÷ 
+//åˆ†æå‘½ä»¤ï¼Œå¹¶è¿”å›è§£ææ ‘ 
 void CInterpret::Parse(char* command) 
 {
 	char tempbuf[COMLEN];
@@ -160,14 +160,14 @@ void CInterpret::Parse(char* command)
 	
 	bool flag;
 	flag = GetWord(temp, word);
-	//ÈôÊÇ¿Õ²éÑ¯
+	//è‹¥æ˜¯ç©ºæŸ¥è¯¢
 	if(!flag)
 	{
 		m_operation = EMPTY;
 		return;
 	}
 
-	//ÈôÊÇÍË³öÃüÁî
+	//è‹¥æ˜¯é€€å‡ºå‘½ä»¤
 	else if(word == "quit")
 	{
 		flag = GetWord(temp, word);
@@ -176,12 +176,12 @@ void CInterpret::Parse(char* command)
 		return;
 	}
 
-	//ÈôÊÇselectÃüÁî
+	//è‹¥æ˜¯selectå‘½ä»¤
 	else if(word == "select")
 	{
 		m_operation = SELERR;
 		
-		//½âÎöselect×Ó¾ä
+		//è§£æselectå­å¥
 		flag = GetWord(temp, word);
 		if(!flag)
 			return;
@@ -210,13 +210,13 @@ void CInterpret::Parse(char* command)
 	
 		if(word != "from")
 			return;
-		//½âÎöfrom×Ó¾ä
+		//è§£æfromå­å¥
 		flag = GetWord(temp, word);
 		if(!flag)
 			return;
 		m_tabname = word.c_str();
 
-		//Èç¹ûÃ»ÓĞwhere×Ó¾ä£¬ÕıÈ··µ»Ø
+		//å¦‚æœæ²¡æœ‰whereå­å¥ï¼Œæ­£ç¡®è¿”å›
 		flag = GetWord(temp, word);
 		if(!flag)
 		{
@@ -225,7 +225,7 @@ void CInterpret::Parse(char* command)
 		}
 		if(word != "where")
 			return;
-		//½âÎöwhere×Ó¾ä
+		//è§£æwhereå­å¥
 			flag = GetWord(temp, word);
 		if(!flag)
 		{
@@ -334,13 +334,13 @@ void CInterpret::Parse(char* command)
 			}
 		}
 	}
-	//ÈôÊÇcreate table/create indexÃüÁî
+	//è‹¥æ˜¯create table/create indexå‘½ä»¤
 	else if(word == "create")
 	{
 		flag = GetWord(temp, word);
 		if(!flag)
 			return;
-		//½âÎöcreate tableÃüÁî
+		//è§£æcreate tableå‘½ä»¤
 		if(word == "table")
 		{
 			m_operation = CRETABERR;
@@ -436,7 +436,7 @@ void CInterpret::Parse(char* command)
 				flag = GetWord(temp, word);
 				if(!flag)
 					return;
-				//Èç¹ûÊÇprimary keyÃüÁî
+				//å¦‚æœæ˜¯primary keyå‘½ä»¤
 				if(word == "primary")
 				{
 					flag = GetWord(temp, word);
@@ -478,7 +478,7 @@ void CInterpret::Parse(char* command)
 					if(!flag)
 						return;
 				}
-				//Èç¹ûÊÇuniqueÃüÁî
+				//å¦‚æœæ˜¯uniqueå‘½ä»¤
 				else if(word == "unique")
 				{
 					flag = GetWord(temp, word);
@@ -514,7 +514,7 @@ void CInterpret::Parse(char* command)
 					if(!flag)
 						return;
 				}
-				//Èç¹û²»ÊÇuniqueÓëprimary keyÃüÁî
+				//å¦‚æœä¸æ˜¯uniqueä¸primary keyå‘½ä»¤
 				else
 				{
 					tempcol = new column;
@@ -599,7 +599,7 @@ void CInterpret::Parse(char* command)
 			if(!flag)
 				m_operation = CRETAB;
 		}
-		//½âÎöcreate indexÃüÁî
+		//è§£æcreate indexå‘½ä»¤
 		else if(word == "index")
 		{
 			m_operation = CREINDERR;
@@ -638,7 +638,7 @@ void CInterpret::Parse(char* command)
 				m_operation = CREIND;
 		}
 	}
-	//ÈôÊÇdelete fromÃüÁî
+	//è‹¥æ˜¯delete fromå‘½ä»¤
 	else if(word == "delete")
 	{
 		flag = GetWord(temp, word);
@@ -652,7 +652,7 @@ void CInterpret::Parse(char* command)
 				return;
 			m_tabname  = word.c_str();
 			flag = GetWord(temp, word);
-			//ÈôÃ»ÓĞwhere×Ó¾ä£¬ÕıÈ··µ»Ø
+			//è‹¥æ²¡æœ‰whereå­å¥ï¼Œæ­£ç¡®è¿”å›
 			if(!flag)
 			{
 				m_operation = DELETED;
@@ -660,7 +660,7 @@ void CInterpret::Parse(char* command)
 			}
 			if(word != "where")
 				return;
-			//¿ªÊ¼½âÎöwhere×Ó¾ä
+			//å¼€å§‹è§£æwhereå­å¥
 			flag = GetWord(temp, word);
 			if(!flag)
 				return;
@@ -768,7 +768,7 @@ void CInterpret::Parse(char* command)
 			}	
 		}
 	}
-	//ÈôÊÇinsert intoÃüÁî
+	//è‹¥æ˜¯insert intoå‘½ä»¤
 	else if(word == "insert")
 	{
 		flag = GetWord(temp, word);
@@ -856,7 +856,7 @@ void CInterpret::Parse(char* command)
 				m_operation  = INSERT;		
 		}
 	}
-	//ÈôÊÇdrop table/drop indexÃüÁî
+	//è‹¥æ˜¯drop table/drop indexå‘½ä»¤
 	else if(word == "drop")
 	{
 		flag = GetWord(temp, word);
@@ -885,7 +885,7 @@ void CInterpret::Parse(char* command)
 				m_operation = DRPIND;
 		}		
 	}
-	//ÈôÊÇexecfileÃüÁî
+	//è‹¥æ˜¯execfileå‘½ä»¤
 	else if(word == "execfile")
 	{
 		m_operation = EXEFILERR;
@@ -900,7 +900,7 @@ void CInterpret::Parse(char* command)
 	return;
 }
 
-//ÊÍ·Å½âÎöÊ÷µÄÄÚ´æ 
+//é‡Šæ”¾è§£ææ ‘çš„å†…å­˜ 
 void CInterpret::DumpTree()
 {
 	column *tempcol, *lastcol;
@@ -930,7 +930,7 @@ void CInterpret::DumpTree()
 	}
 }
 
-//¸ù¾İ½âÎöÊ÷Ñ¡ÔñAPI£¬»ò·µ»Ø´íÎóĞÅÏ¢ 
+//æ ¹æ®è§£ææ ‘é€‰æ‹©APIï¼Œæˆ–è¿”å›é”™è¯¯ä¿¡æ¯ 
 void CInterpret::Execute()
 {
 	switch(m_operation)
@@ -1014,7 +1014,7 @@ void CInterpret::Execute()
 	DumpTree();	
 }
 
-//¼ì²é input ÊÇ·ñÊÇÊı×Ö 
+//æ£€æŸ¥ input æ˜¯å¦æ˜¯æ•°å­— 
 short int CInterpret::IsInt(const char *input)
 {
 	int i;
@@ -1029,7 +1029,7 @@ short int CInterpret::IsInt(const char *input)
 	return 1;
 }
 
-//¼ì²é input ÊÇ·ñÊÇ¸¡µãÊı 
+//æ£€æŸ¥ input æ˜¯å¦æ˜¯æµ®ç‚¹æ•° 
 short int CInterpret::IsFloat(char *input)
 {
 		int dot = 0;
@@ -1056,7 +1056,7 @@ short int CInterpret::IsFloat(char *input)
 
 ////////////   API   //////////////// 
 
-//ÊµÏÖSQLÖĞ select ¹¦ÄÜ 
+//å®ç°SQLä¸­ select åŠŸèƒ½ 
 void CInterpret::ExecSelect()
 {
 	column *tempcol, *lastcol;
@@ -1072,7 +1072,7 @@ void CInterpret::ExecSelect()
 	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
 		tempcol = m_cols;
-		//Èç¹ûÒª·µ»ØµÄÊÇ"*"£¬¼´È«²¿·µ»Ø£¬Òª´Ó catalogÀïÈ¡µÃËùÓĞÊôĞÔµÄĞÅÏ¢
+		//å¦‚æœè¦è¿”å›çš„æ˜¯"*"ï¼Œå³å…¨éƒ¨è¿”å›ï¼Œè¦ä» catalogé‡Œå–å¾—æ‰€æœ‰å±æ€§çš„ä¿¡æ¯
 		if(!strcmp(tempcol -> colname, "*") && tempcol -> next == NULL)
 		{
 			attrnum = Catalog.GetAttrNum(m_tabname.c_str());
@@ -1081,7 +1081,7 @@ void CInterpret::ExecSelect()
 			lastcol = tempcol;
 			for(i = 1 ; i < attrnum ; i ++)					
 			{
-				//µÃµ½µÚi¸öÊôĞÔµÄĞÅÏ¢
+				//å¾—åˆ°ç¬¬iä¸ªå±æ€§çš„ä¿¡æ¯
 				tempcol = new column;
 				initcol(tempcol);
 				Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
@@ -1089,7 +1089,7 @@ void CInterpret::ExecSelect()
 				lastcol = tempcol;
 			}
 		}
-		//·ñÔòÖ»ÒªÑéÖ¤ÊÇ·ñÓĞ¸ÃÊôĞÔ²¢È¡µÃ¸ÃÊôĞÔµÄoffsetÓëlength
+		//å¦åˆ™åªè¦éªŒè¯æ˜¯å¦æœ‰è¯¥å±æ€§å¹¶å–å¾—è¯¥å±æ€§çš„offsetä¸length
 		else while(tempcol)
 		{
 			if(!Catalog.IsAttrExists(m_tabname.c_str(), tempcol -> colname))
@@ -1103,7 +1103,7 @@ void CInterpret::ExecSelect()
 		}
 		tempcond = m_conds;
 
-		//ÑéÖ¤where²¿·ÖÀàĞÍÊÇ·ñÏà·û£¬²¢È¡µÃÌõ¼şÖĞ¸÷ÊôĞÔµÄoffset¼°length
+		//éªŒè¯whereéƒ¨åˆ†ç±»å‹æ˜¯å¦ç›¸ç¬¦ï¼Œå¹¶å–å¾—æ¡ä»¶ä¸­å„å±æ€§çš„offsetåŠlength
 		while(tempcond)
 		{
 			condcount ++;
@@ -1140,7 +1140,7 @@ void CInterpret::ExecSelect()
 			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname.c_str(), tempcond -> attrname);
 			tempcond = tempcond -> next;
 		}
-		//Èç¹ûÌõ¼şÖ»ÓĞ1ÏîÇÒÊÇµÈÖµ±È½Ï£¬¿ÉÄÜ´æÔÚindex
+		//å¦‚æœæ¡ä»¶åªæœ‰1é¡¹ä¸”æ˜¯ç­‰å€¼æ¯”è¾ƒï¼Œå¯èƒ½å­˜åœ¨index
 		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
 		if(condcount == 1 && m_conds -> cond == EQ)
 		{
@@ -1162,7 +1162,7 @@ void CInterpret::ExecSelect()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
-//ÊµÏÖSQLÖĞµÄ delete ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ delete åŠŸèƒ½ 
 void CInterpret::ExecDelete()
 {
 	condition *tempcond = m_conds;
@@ -1175,7 +1175,7 @@ void CInterpret::ExecDelete()
 
 	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{		
-		//ÑéÖ¤Ìõ¼ş²¿·ÖÀàĞÍÊÇ·ñÏà·û£¬²¢È¡µÃÌõ¼şÖĞ¸÷ÊôĞÔµÄoffset¼°length
+		//éªŒè¯æ¡ä»¶éƒ¨åˆ†ç±»å‹æ˜¯å¦ç›¸ç¬¦ï¼Œå¹¶å–å¾—æ¡ä»¶ä¸­å„å±æ€§çš„offsetåŠlength
 		while(tempcond)
 		{
 			condcount ++;
@@ -1212,7 +1212,7 @@ void CInterpret::ExecDelete()
 			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname.c_str(), tempcond -> attrname);
 			tempcond = tempcond -> next;
 		}
-		//Èç¹ûÌõ¼şÖ»ÓĞ1Ïî£¬²¢ÇÒÊÇµÈÖµ±È½Ï,¿ÉÄÜ´æÔÚindex
+		//å¦‚æœæ¡ä»¶åªæœ‰1é¡¹ï¼Œå¹¶ä¸”æ˜¯ç­‰å€¼æ¯”è¾ƒ,å¯èƒ½å­˜åœ¨index
 		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
 		if(condcount == 1 && m_conds -> cond == EQ)
 		{
@@ -1238,7 +1238,7 @@ void CInterpret::ExecDelete()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
-//ÊµÏÖSQLÖĞµÄ insert ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ insert åŠŸèƒ½ 
 void CInterpret::ExecInsert()
 {
 	insertvalue *tempval;
@@ -1260,7 +1260,7 @@ void CInterpret::ExecInsert()
 
 			Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
 			type = tempcol -> type;
-			//¼ì²éÀàĞÍÊÇ·ñÕıÈ·
+			//æ£€æŸ¥ç±»å‹æ˜¯å¦æ­£ç¡®
 			if(type == INT && tempval -> type  == NOTCHAR)
 			{
 				if(!IsInt(tempval -> value))
@@ -1284,14 +1284,14 @@ void CInterpret::ExecInsert()
 					return;
 			}
 
-			//¼ì²é³¤¶ÈÊÇ·ñÔ½½ç
+			//æ£€æŸ¥é•¿åº¦æ˜¯å¦è¶Šç•Œ
 			if(strlen(tempval -> value) > tempcol -> collength-1)
 			{
 				printf("Error: value of attribute '%s' is out of boundry! Please check your input!\n");
 				return;
 			}
 			tempval -> length = tempcol -> collength;
-			//¼ì²éÎ¨Ò»ĞÔ
+			//æ£€æŸ¥å”¯ä¸€æ€§
 			if(tempcol -> IsUnique)
 			{
 				//mirror
@@ -1315,7 +1315,7 @@ void CInterpret::ExecInsert()
 		CRecordManager rdmanager(m_tabname);
 		recordno = rdmanager.InsertValues(m_values, recordlen);
 		Catalog.RecordNumAdd(m_tabname.c_str(), 1);
-		//ÓĞË÷ÒıµÄÒª²åÈëË÷Òı
+		//æœ‰ç´¢å¼•çš„è¦æ’å…¥ç´¢å¼•
 		tempval = m_values;
 		for(i = 0 ; i < AttrNum ; i++)
 		{
@@ -1336,7 +1336,7 @@ void CInterpret::ExecInsert()
 		printf("Table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
-//ÊµÏÖSQLÖĞµÄ drop table ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ drop table åŠŸèƒ½ 
 void CInterpret::ExecDropTable()
 {
 	char ch,syscommand[FILENAMELEN];
@@ -1351,7 +1351,7 @@ void CInterpret::ExecDropTable()
 //		cin >> ch;
 //		if(ch == 'y')
 		{
-			//ÏÈÉ¾Ë÷Òı
+			//å…ˆåˆ ç´¢å¼•
 			AttrNum = Catalog.GetAttrNum(m_tabname.c_str());
 			tempcol = new column;
 			for(i = 0 ; i < AttrNum ; i ++)
@@ -1370,12 +1370,12 @@ void CInterpret::ExecDropTable()
 				}
 			}
 			delete tempcol;
-			//É¾±í¸ñĞÅÏ¢
+			//åˆ è¡¨æ ¼ä¿¡æ¯
 			Catalog.DeleteTableInfo(m_tabname.c_str());
-			//Çå¿ÕbufferÄÚÈİ
+			//æ¸…ç©ºbufferå†…å®¹
 			CRecordManager rdmanager(m_tabname);
 			rdmanager.clear_tabblk();
-			//É¾³ıËùÓĞÏà¹ØÎÄ¼ş
+			//åˆ é™¤æ‰€æœ‰ç›¸å…³æ–‡ä»¶
 			strcpy(syscommand, "del ");
 			strcat(syscommand, m_tabname.c_str());
 			strcat(syscommand, ".map");
@@ -1393,7 +1393,7 @@ void CInterpret::ExecDropTable()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
-//ÊµÏÖSQLÖĞµÄ drop index ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ drop index åŠŸèƒ½ 
 void CInterpret::ExecDropIndex()
 {
 	char ch,syscommand[FILENAMELEN];
@@ -1421,7 +1421,7 @@ void CInterpret::ExecDropIndex()
 
 }
 
-//ÊµÏÖSQLÖĞµÄ create table ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ create table åŠŸèƒ½ 
 void CInterpret::ExecCreateTable()
 {
 	short int primarynum = 0;
@@ -1431,14 +1431,14 @@ void CInterpret::ExecCreateTable()
 	int count=1;
 	FILE *fp;
 	
-	//¼ì²éÍ¬Ãû±í¸ñÊÇ·ñ´æÔÚ
+	//æ£€æŸ¥åŒåè¡¨æ ¼æ˜¯å¦å­˜åœ¨
 	int flag = Catalog.IsTableExists(m_tabname.c_str());
 	if(flag)
 	{
 		printf("Table '%s' already exists!\n", m_tabname.c_str());
 		return;
 	}
-	//¼ì²éprimary keyÊÇ·ñ³¬¹ı1¸ö
+	//æ£€æŸ¥primary keyæ˜¯å¦è¶…è¿‡1ä¸ª
 	while(tempcol)
 	{
 		if(tempcol -> IsPrimary)
@@ -1453,7 +1453,7 @@ void CInterpret::ExecCreateTable()
 		printf("Error: only one primary key allowed! Please check your input!\n");
 		return;
 	}
-	//½¨table µÄcatalog
+	//å»ºtable çš„catalog
 	Catalog.CreateTableInfo(m_tabname.c_str(), m_cols);
 	strcpy(filename, m_tabname.c_str());
 	strcat(filename, ".tab");
@@ -1469,7 +1469,7 @@ void CInterpret::ExecCreateTable()
 	fwrite(&count, sizeof(int), 1, fp);
 	fclose(fp);
 	
-	//Èç¹ûÓĞprimary key,½¨Ë÷Òı
+	//å¦‚æœæœ‰primary key,å»ºç´¢å¼•
 	if(primarycol)
 	{
 		strcpy(filename,m_tabname.c_str());
@@ -1486,7 +1486,7 @@ void CInterpret::ExecCreateTable()
 	printf("Table '%s' is created successfully\n", m_tabname.c_str());
 }
 
-//ÊµÏÖSQLÖĞµÄ create index ¹¦ÄÜ 
+//å®ç°SQLä¸­çš„ create index åŠŸèƒ½ 
 void CInterpret::ExecCreateIndex()
 {
 	char filename[FILENAMELEN];
@@ -1497,19 +1497,19 @@ void CInterpret::ExecCreateIndex()
 
 	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
-		//ÈôÊôĞÔ²»´æÔÚ
+		//è‹¥å±æ€§ä¸å­˜åœ¨
 		if(!Catalog.IsAttrExists(m_tabname.c_str(), m_cols -> colname))
 		{
 			printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_cols -> colname, m_tabname.c_str());
 			return;
 		}
-		//Èô·ÇuniqueÊôĞÔ
+		//è‹¥éuniqueå±æ€§
 		if(!Catalog.IsAttrUnique(m_tabname.c_str(), m_cols -> colname))
 		{
 			printf("Error '%s' is not an unique attribute! Please check your input!\n", m_cols -> colname);
 			return;
 		}
-		//Èô¸ÃÊôĞÔÒÑ½¨Ë÷Òı
+		//è‹¥è¯¥å±æ€§å·²å»ºç´¢å¼•
 		if(Catalog.IsIndexCreated(m_tabname.c_str(), m_cols -> colname))
 		{
 			printf("Error: Index on attribute '%s' has already been built! Please check your input!\n", m_cols -> colname);
@@ -1539,7 +1539,7 @@ void CInterpret::ExecCreateIndex()
 		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
-//ÊµÏÖÎÄ¼ş²Ù×÷ 
+//å®ç°æ–‡ä»¶æ“ä½œ 
 void CInterpret::ExecFile()
 {
 	FILE *fp;
@@ -1561,7 +1561,7 @@ void CInterpret::ExecFile()
 			goto finish;
 		while(c != ';')
 		{
-			//¶Áµ½ÎÄ¼ş½áÊøÁË
+			//è¯»åˆ°æ–‡ä»¶ç»“æŸäº†
 			if(c == EOF)
 				goto finish;
 			command[comnum++] = c;

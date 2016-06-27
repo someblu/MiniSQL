@@ -5,6 +5,7 @@
 #include "interpret.h"
 #include "catalog_manager.h"
 #include "buffer_manager.h"
+#include "record_manager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

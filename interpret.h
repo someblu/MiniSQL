@@ -7,14 +7,14 @@ using namespace std;
 
 class CInterpret {
 public:
-	//½âÎöÊ÷,ËùÓĞµÄÃüÁî¾ù¿ÉÒÔ·´Ó³µ½ÕâÑùÒ»¿ÃÊ÷ÉÏ
-	unsigned int m_operation;		//ÒªÖ´ĞĞµÄ²Ù×÷»ò´íÎó´úÂë,ÓÃºê±íÊ¾
-	string m_tabname;				//Òª²Ù×÷µÄ±í¸ñÃû
-	string m_indname;				//Òª²Ù×÷µÄË÷ÒıÃû
-	string m_filename;				//Òª²Ù×÷µÄÎÄ¼şÃû,execfileÓÃµ½
-	column *m_cols;					//Òª²Ù×÷µÄÊôĞÔÁ´±í
-	condition *m_conds;				//Òª±È½ÏµÄwhere×Ö¾äµÄÁ´±í
-	insertvalue *m_values;			//Òª²åÈëµÄÖµÁ´±í
+	//è§£ææ ‘,æ‰€æœ‰çš„å‘½ä»¤å‡å¯ä»¥åæ˜ åˆ°è¿™æ ·ä¸€æ£µæ ‘ä¸Š
+	unsigned int m_operation;		//è¦æ‰§è¡Œçš„æ“ä½œæˆ–é”™è¯¯ä»£ç ,ç”¨å®è¡¨ç¤º
+	string m_tabname;				//è¦æ“ä½œçš„è¡¨æ ¼å
+	string m_indname;				//è¦æ“ä½œçš„ç´¢å¼•å
+	string m_filename;				//è¦æ“ä½œçš„æ–‡ä»¶å,execfileç”¨åˆ°
+	column *m_cols;					//è¦æ“ä½œçš„å±æ€§é“¾è¡¨
+	condition *m_conds;				//è¦æ¯”è¾ƒçš„whereå­—å¥çš„é“¾è¡¨
+	insertvalue *m_values;			//è¦æ’å…¥çš„å€¼é“¾è¡¨
 
 	//static CCatalogManager Catalog;
 
