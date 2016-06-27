@@ -33,7 +33,7 @@ public:
 	int CreateIndex(column *cols, unsigned int recordlen);
 	int InsertIndex(insertvalue *value, unsigned int recordnum, int recordlen);
 	int keycompare(char *a,char *b, int tag);
-
+	void clear_idxblk();
 protected:
 	int m_blocknumber;  //块号
 	int m_count;        //节点中总记录数

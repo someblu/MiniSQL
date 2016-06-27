@@ -2,7 +2,7 @@
 //
 
 #include "MiniSQL.h"
-//#include "interpret.h"
+#include "interpret.h"
 #include "catalog_manager.h"
 #include "buffer_manager.h"
 
@@ -48,7 +48,7 @@ int main(int argc, const char* argv[], const char* envp[])
 	char input[INPUTLEN] = "";
 	char word[WORDLEN] = "";
 	short int ComEnd = 0;
-//	CInterpret parsetree;
+	CInterpret parsetree;
 
 	cout << endl
 	 << "         _       __  ______  __     ______  ____    __  ___  ______   " << endl
@@ -59,7 +59,7 @@ int main(int argc, const char* argv[], const char* envp[])
 
 	cout <<"  *************************************************************************" << endl
 	 <<"  **                         Welcom to MiniSQL!                          **" << endl
-	 <<"  **                    Copyright by 陈玮 吴斌 黄欣 程恒奇               **" <<endl
+	 <<"  **                    Copyright by                                     **" <<endl
 	 <<"  **              Chukezhen honours College 2002 Mixedclass Team         **" << endl
 	 <<"  *************************************************************************" << endl << endl;
 
@@ -74,13 +74,14 @@ int main(int argc, const char* argv[], const char* envp[])
 		{
 			printf("mini>> ");
 			gets(input);
+//			cout << "||" << input << "||" << endl;
 			if(IsComEnd(input))
 				ComEnd = 1;
 			strcat(command, input);
 			AddSeperator(command);
 		}
-//		parsetree.Parse(command);
-//		parsetree.Execute();
+		parsetree.Parse(command);
+		parsetree.Execute();
 	}
 	return 0;
 }

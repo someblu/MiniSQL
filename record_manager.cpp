@@ -112,6 +112,16 @@ short int CRecordManager::ValueCompare(char *value, unsigned int type, unsigned 
 
 }
 
+
+void CRecordManager::clear_tabblk(){
+	
+	string tabfilename, mapfilename;
+	tabfilename = m_tablename + ".tab"; 
+	mapfilename = m_tablename + ".map";
+
+	buffer_clear(tabfilename,TABLE);
+	buffer_clear(mapfilename,MAP);
+}
 short int CRecordManager::SelectRecord(condition *conds, column *cols, unsigned int recordlen)//, unsigned int recordnum)
 {
 	int *intp;

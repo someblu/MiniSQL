@@ -173,39 +173,39 @@ void CCatalogManager::UpdateCatalog()
 	char buffer[100];
 	FILE* fp;
 
-	if(m_tablehead != NULL){							//å¦‚æžœä¸ºç©ºï¼Œè¯´æ˜Ž.catæ–‡ä»¶åˆšè¢«readcatalogå»ºç«‹ 
-														//æ‰€ä»¥ä¸éœ€è¦å†™å›ž
+	if(m_tablehead != NULL){							//Èç¹ûÎª¿Õ£¬ËµÃ÷.catÎÄ¼þ¸Õ±»readcatalog½¨Á¢ 
+														//ËùÒÔ²»ÐèÒªÐ´»Ø
 
-	TablePointer ptrTable = m_tablehead;				//è¡¨çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
-	AttrPointer ptrAttr = ptrTable->AllAttrs;			//å±žæ€§çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
-	IndexPointer ptrIndex = m_indexhead;				//ç´¢å¼•çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
+	TablePointer ptrTable = m_tablehead;				//±íµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
+	AttrPointer ptrAttr = ptrTable->AllAttrs;			//ÊôÐÔµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
+	IndexPointer ptrIndex = m_indexhead;				//Ë÷ÒýµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
 	
-	TablePointer tempT = ptrTable;						//åˆ é™¤è¡¨çš„é“¾è¡¨æ—¶
-	AttrPointer tempA = ptrAttr;						//ç”¨åˆ°çš„ä¸´æ—¶æŒ‡é’ˆ
+	TablePointer tempT = ptrTable;						//É¾³ý±íµÄÁ´±íÊ±
+	AttrPointer tempA = ptrAttr;						//ÓÃµ½µÄÁÙÊ±Ö¸Õë
 	
-	IndexPointer temp = ptrIndex;						//åˆ é™¤ç´¢å¼•çš„é“¾è¡¨æ—¶
-														//ç”¨åˆ°çš„ä¸´æ—¶æŒ‡é’ˆ
+	IndexPointer temp = ptrIndex;						//É¾³ýË÷ÒýµÄÁ´±íÊ±
+														//ÓÃµ½µÄÁÙÊ±Ö¸Õë
 	int attrtype = 0;
 	unsigned int len = 0;
 	int tagP = 0;										
 
-	//å‘æŒ‡å®šçš„.catæ–‡ä»¶å†™å›žè¡¨çš„é“¾è¡¨
+	//ÏòÖ¸¶¨µÄ.catÎÄ¼þÐ´»Ø±íµÄÁ´±í
 
-	if ((fp = fopen("tables.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
+	if ((fp = fopen("tables.catlog","r")) == NULL)				//ÎÄ¼þ²»´æÔÚ
 	{	
-		fp = fopen("tables.catlog","w");						//æ–°å»ºæ–‡ä»¶
+		fp = fopen("tables.catlog","w");						//ÐÂ½¨ÎÄ¼þ
 	}	
 	fclose(fp);
 
-	fp = fopen("tables.catlog","w");							//å¼€å§‹å†™æ–‡ä»¶
+	fp = fopen("tables.catlog","w");							//¿ªÊ¼Ð´ÎÄ¼þ
 	
-	while(ptrTable != NULL)
+     while(ptrTable != NULL)
 	{
-		strcpy(buffer,ptrTable->TableName);				//è¡¨çš„åå­—
+		strcpy(buffer,ptrTable->TableName);				//±íµÄÃû×Ö
 		fprintf(fp,buffer);
 		fprintf(fp,"\n");
 		
-		strcpy(buffer,ptrTable->primarykey);			//è¡¨çš„ä¸»é”®
+		strcpy(buffer,ptrTable->primarykey);			//±íµÄÖ÷¼ü
 		fprintf(fp,buffer);
 	
 		fprintf(fp,"\n");
@@ -216,9 +216,9 @@ void CCatalogManager::UpdateCatalog()
 		
 		
 		ptrAttr = ptrTable ->AllAttrs;
-		while(ptrAttr != NULL)							//è¡¨éžç©º
+		while(ptrAttr != NULL)							//±í·Ç¿Õ
 		{
-			strcpy(buffer,ptrAttr->AttrName);			//ç¬¬ä¸€ä¸ªå±žæ€§çš„åå­—
+			strcpy(buffer,ptrAttr->AttrName);			//µÚÒ»¸öÊôÐÔµÄÃû×Ö
 			fprintf(fp,buffer);
 			fprintf(fp,"\n");
 
@@ -275,15 +275,15 @@ void CCatalogManager::UpdateCatalog()
 		tempT = ptrTable;
 	}
 
-	//å‘æŒ‡å®šçš„.catæ–‡ä»¶å†™å›žç´¢å¼•çš„é“¾è¡¨
+	//ÏòÖ¸¶¨µÄ.catÎÄ¼þÐ´»ØË÷ÒýµÄÁ´±í
 
-	if ((fp = fopen("index.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
+	if ((fp = fopen("index.catlog","r")) == NULL)				//ÎÄ¼þ²»´æÔÚ
 	{	
-		fp = fopen("index.catlog","w");						//æ–°å»ºæ–‡ä»¶
+		fp = fopen("index.catlog","w");						//ÐÂ½¨ÎÄ¼þ
 	}	
 	fclose(fp);
 
-	fp = fopen("index.catlog","w");							//å¼€å§‹å†™æ–‡ä»¶
+	fp = fopen("index.catlog","w");							//¿ªÊ¼Ð´ÎÄ¼þ
 	
 	while(ptrIndex != NULL)
 	{
@@ -317,6 +317,25 @@ void CCatalogManager::UpdateCatalog()
 		temp = ptrIndex;
 	}
 	}
+	else{
+		if ((fp = fopen("tables.catlog","r")) == NULL)				//ÎÄ¼þ²»´æÔÚ
+		{	
+			fp = fopen("tables.catlog","w");						//ÐÂ½¨ÎÄ¼þ
+		}	
+		fclose(fp);	
+		fp = fopen("tables.catlog","w");
+		fprintf(fp,"-1\n-1\n");
+		fclose(fp);	
+		
+		if ((fp = fopen("index.catlog","r")) == NULL)				//ÎÄ¼þ²»´æÔÚ
+	    {	
+		fp = fopen("index.catlog","w");						//ÐÂ½¨ÎÄ¼þ
+		}	
+		fclose(fp);
+		fp = fopen("index.catlog","w");	
+		fprintf(fp,"-1\n");
+		fclose(fp);		
+	}
 }
 
 short int CCatalogManager::IsTableExists(const char* tablename)
@@ -345,6 +364,8 @@ short int CCatalogManager::DeleteTableInfo(const char* tablename)
 			if(ptrTable == m_tablehead)
 			{
 				m_tablehead = ptrTable->Next;
+				if(ptrTable ==m_tabletail)
+				m_tabletail = NULL;
 				delete ptrTable;
 				return 1;
 			}
@@ -398,6 +419,8 @@ short int CCatalogManager::DeleteIndexInfo(const char* indexname)
 			if(ptrIndex == m_indexhead)
 			{
 				m_indexhead = ptrIndex->Next;
+				if(ptrIndex==m_indextail)
+				m_indextail=NULL;
 				delete ptrIndex;
 				return 1;
 			}

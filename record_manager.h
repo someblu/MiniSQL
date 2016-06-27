@@ -21,7 +21,7 @@ public:
 	short int DeleteRecord(condition *conds, unsigned int recordlen);
 	short int IsValueExists(column *cols, char *value, unsigned int recornum);
 	unsigned int InsertValues(insertvalue *values, unsigned int recordlen);
-	
+	void clear_tabblk();
 protected:
 	short int ValueCompare(char *value, unsigned int type, unsigned int cond, char *compvalue);	  
 };

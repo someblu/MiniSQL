@@ -1,7 +1,7 @@
 //head file including
 #include "MiniSQL.h"
 //#include "stdafx.h"
-//#include "index_manager.h"
+#include "index_manager.h"
 #include "buffer_manager.h"
 #include "record_manager.h"
 #include "catalog_manager.h"
@@ -51,14 +51,15 @@ bool CInterpret::GetWord(string& src, string& des)
 	unsigned int srcpos = 0, despos = 0;
 	char temp = ' ';
 
+	des.erase(0, des.length());
+
 	for(;srcpos<src.length();srcpos++) {
 		if(temp == ' ' || temp == '\t' || temp == 10 || temp == 13)
 			temp = src.at(srcpos);
 		else break;
 	}
 	if(srcpos == src.length() && (temp == ' ' || temp == '\t' || temp == 10 || temp == 13))
-		return false;
-			
+		return false;		
 	switch(temp)
 	{
 	case ',':
@@ -68,7 +69,7 @@ bool CInterpret::GetWord(string& src, string& des)
 	case '=':
 	case '\'':
 		des.replace(despos++, 1, 1, temp);
-		des.replace(despos++, 1, 1, '\0');
+//		des.replace(despos++, 1, 1, '\0');
 		src.erase(0,srcpos);
 		break;
 	case '<':
@@ -77,12 +78,12 @@ bool CInterpret::GetWord(string& src, string& des)
 		if(temp == '=' || temp == '>')
 		{
 			des.replace(despos++, 1, 1, temp);
-			des.replace(despos++, 1, 1, '\0');
+//			des.replace(despos++, 1, 1, '\0');
 			src.erase(0,srcpos);
 		}
 		else
 		{
-			des.replace(despos++, 1, 1, '\0');
+//			des.replace(despos++, 1, 1, '\0');
 			src.erase(0,srcpos-1);
 		}
 		break;
@@ -92,12 +93,12 @@ bool CInterpret::GetWord(string& src, string& des)
 		if(temp == '=')
 		{
 			des.replace(despos++, 1, 1, temp);
-			des.replace(despos++, 1, 1, '\0');
+//			des.replace(despos++, 1, 1, '\0');
 			src.erase(0,srcpos);
 		}
 		else
 		{
-			des.replace(despos++, 1, 1, '\0');
+//			des.replace(despos++, 1, 1, '\0');
 			src.erase(0,srcpos-1);
 		}
 		break;
@@ -108,14 +109,15 @@ bool CInterpret::GetWord(string& src, string& des)
 				temp = src.at(srcpos++);
 			else  {
 				src.erase(0,srcpos);
-				des.replace(despos++, 1, 1, '\0');
+//				des.replace(despos++, 1, 1, '\0');
 				return true;
 			}
 		}while(temp != '*' && temp != ',' && temp != '(' && temp != ')'
 			&& temp != ' ' && temp != '\t' && temp != '=' && temp != '>' 
 			&& temp != '<' && temp != '\'' && temp != 10 && temp != 13 );
 		src.erase(0,srcpos-1);
-		des.replace(despos++, 1, 1, '\0');
+//		des.replace(despos++, 1, 1, '\0');
+//		des.erase(despos-1,despos);
 	}
 	return true;
 }
@@ -224,7 +226,7 @@ void CInterpret::Parse(char* command)
 		if(word != "where")
 			return;
 		//解析where子句
-		flag = GetWord(temp, word);
+			flag = GetWord(temp, word);
 		if(!flag)
 		{
 			m_operation = SELECT;
@@ -1067,22 +1069,22 @@ void CInterpret::ExecSelect()
 	unsigned int recordlen;
 	unsigned int recordnum;
 
-	if(Catalog.IsTableExists(m_tabname))
+	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
 		tempcol = m_cols;
 		//如果要返回的是"*"，即全部返回，要从 catalog里取得所有属性的信息
 		if(!strcmp(tempcol -> colname, "*") && tempcol -> next == NULL)
 		{
-			attrnum = Catalog.GetAttrNum(m_tabname);
+			attrnum = Catalog.GetAttrNum(m_tabname.c_str());
 			initcol(tempcol);
-			Catalog.GetAttrInfo(m_tabname, 0, tempcol);
+			Catalog.GetAttrInfo(m_tabname.c_str(), 0, tempcol);
 			lastcol = tempcol;
 			for(i = 1 ; i < attrnum ; i ++)					
 			{
 				//得到第i个属性的信息
 				tempcol = new column;
 				initcol(tempcol);
-				Catalog.GetAttrInfo(m_tabname, i, tempcol);
+				Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
 				lastcol -> next = tempcol;
 				lastcol = tempcol;
 			}
@@ -1090,13 +1092,13 @@ void CInterpret::ExecSelect()
 		//否则只要验证是否有该属性并取得该属性的offset与length
 		else while(tempcol)
 		{
-			if(!Catalog.IsAttrExists(m_tabname, tempcol -> colname))
+			if(!Catalog.IsAttrExists(m_tabname.c_str(), tempcol -> colname))
 			{
-				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname, tempcol -> colname);
+				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname.c_str(), tempcol -> colname);
 				return;
 			}
-			tempcol->coloffset = Catalog.GetAttrOffset(m_tabname, tempcol -> colname);
-			tempcol->collength = Catalog.GetAttrLength(m_tabname, tempcol -> colname);
+			tempcol->coloffset = Catalog.GetAttrOffset(m_tabname.c_str(), tempcol -> colname);
+			tempcol->collength = Catalog.GetAttrLength(m_tabname.c_str(), tempcol -> colname);
 			tempcol = tempcol -> next;
 		}
 		tempcond = m_conds;
@@ -1105,12 +1107,12 @@ void CInterpret::ExecSelect()
 		while(tempcond)
 		{
 			condcount ++;
-			if(!Catalog.IsAttrExists(m_tabname, tempcond -> attrname))
+			if(!Catalog.IsAttrExists(m_tabname.c_str(), tempcond -> attrname))
 			{
-				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname, tempcond -> attrname);
+				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname.c_str(), tempcond -> attrname);
 				return;
 			}
-			type = Catalog.GetAttrTypeByName(m_tabname, tempcond -> attrname);
+			type = Catalog.GetAttrTypeByName(m_tabname.c_str(), tempcond -> attrname);
 			if(type == INT && tempcond->type  == NOTCHAR)
 			{
 				if(!IsInt(tempcond->value))
@@ -1134,30 +1136,30 @@ void CInterpret::ExecSelect()
 					printf("Error: data Type error with attribute '%s'! Please check your input!\n", tempcond ->attrname); 
 					return;
 			}
-			tempcond -> attroffset = Catalog.GetAttrOffset(m_tabname, tempcond -> attrname);
-			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname, tempcond -> attrname);
+			tempcond -> attroffset = Catalog.GetAttrOffset(m_tabname.c_str(), tempcond -> attrname);
+			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname.c_str(), tempcond -> attrname);
 			tempcond = tempcond -> next;
 		}
-/*		//如果条件只有1项且是等值比较，可能存在index
-		recordlen = Catalog.GetRecordLength(m_tabname);
+		//如果条件只有1项且是等值比较，可能存在index
+		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
 		if(condcount == 1 && m_conds -> cond == EQ)
 		{
-			if(Catalog.IsIndexCreated(m_tabname, m_conds -> attrname))
+			if(Catalog.IsIndexCreated(m_tabname.c_str(), m_conds -> attrname))
 			{
-				indexname=Catalog.GetIndexName(m_tabname, m_conds -> attrname);
+				indexname=Catalog.GetIndexName(m_tabname.c_str(), m_conds -> attrname);
 				//mirror
 				CIndexManager idxmanager(indexname,m_tabname);
 				idxmanager.SelectIndex(m_conds, m_cols, recordlen);
 				return;
 			}
-		}*/
-		recordnum = Catalog.GetRecordNumber(m_tabname);
+		}
+		recordnum = Catalog.GetRecordNumber(m_tabname.c_str());
 		//mirror
 		CRecordManager rdmanager(m_tabname);
 		rdmanager.SelectRecord(m_conds, m_cols, recordlen);//, recordnum);	
 	}
 	else
-		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
+		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
 //实现SQL中的 delete 功能 
@@ -1171,18 +1173,18 @@ void CInterpret::ExecDelete()
 	unsigned int recordnum;
 	unsigned int deleted;
 
-	if(Catalog.IsTableExists(m_tabname))
+	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{		
 		//验证条件部分类型是否相符，并取得条件中各属性的offset及length
 		while(tempcond)
 		{
 			condcount ++;
-			if(!Catalog.IsAttrExists(m_tabname, tempcond -> attrname))
+			if(!Catalog.IsAttrExists(m_tabname.c_str(), tempcond -> attrname))
 			{
-				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname, tempcond -> attrname);
+				printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_tabname.c_str(), tempcond -> attrname);
 				return;
 			}
-			type = Catalog.GetAttrTypeByName(m_tabname, tempcond -> attrname);
+			type = Catalog.GetAttrTypeByName(m_tabname.c_str(), tempcond -> attrname);
 			if(type == INT && tempcond -> type  == NOTCHAR)
 			{
 				if(!IsInt(tempcond -> value))
@@ -1206,34 +1208,34 @@ void CInterpret::ExecDelete()
 					printf(" Error: data Type error with attribute '%s'! Please check your input!\n", tempcond ->attrname); 
 					return;
 			}
-			tempcond -> attroffset = Catalog.GetAttrOffset(m_tabname, tempcond -> attrname);
-			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname, tempcond -> attrname);
+			tempcond -> attroffset = Catalog.GetAttrOffset(m_tabname.c_str(), tempcond -> attrname);
+			tempcond -> attrlength = Catalog.GetAttrLength(m_tabname.c_str(), tempcond -> attrname);
 			tempcond = tempcond -> next;
 		}
-/*		//如果条件只有1项，并且是等值比较,可能存在index
-		recordlen = Catalog.GetRecordLength(m_tabname);
+		//如果条件只有1项，并且是等值比较,可能存在index
+		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
 		if(condcount == 1 && m_conds -> cond == EQ)
 		{
-			if(Catalog.IsIndexCreated(m_tabname, m_conds -> attrname))
+			if(Catalog.IsIndexCreated(m_tabname.c_str(), m_conds -> attrname))
 			{
-				indexname=Catalog.GetIndexName(m_tabname, m_conds -> attrname);
+				indexname=Catalog.GetIndexName(m_tabname.c_str(), m_conds -> attrname);
 				//mirror
 				CIndexManager idxmanager(indexname, m_tabname);
 				idxmanager.DeleteIndex(m_conds, recordlen);
-				printf("1 record(s) are deleted from table '%s'\n", m_tabname);
-				Catalog.RecordNumDel(m_tabname, 1);
+				printf("1 record(s) are deleted from table '%s'\n", m_tabname.c_str());
+				Catalog.RecordNumDel(m_tabname.c_str(), 1);
 				return;
 			}
-		}*/
-		recordnum = Catalog.GetRecordNumber(m_tabname);
+		}
+		recordnum = Catalog.GetRecordNumber(m_tabname.c_str());
 		//mirror
 		CRecordManager rdmanager(m_tabname);
 		deleted = rdmanager.DeleteRecord(m_conds, recordlen);//, recordnum);	
-		Catalog.RecordNumDel(m_tabname, deleted);
-		printf("%d record(s) are deleted from table '%s'\n", deleted, m_tabname);
+		Catalog.RecordNumDel(m_tabname.c_str(), deleted);
+		printf("%d record(s) are deleted from table '%s'\n", deleted, m_tabname.c_str());
 	}
 	else
-		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
+		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
 //实现SQL中的 insert 功能 
@@ -1247,16 +1249,16 @@ void CInterpret::ExecInsert()
 	char indexname[NAMELEN];
 	unsigned int recordlen;
 
-	if(Catalog.IsTableExists(m_tabname))
+	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
 		tempval = m_values;
 		tempcol = new column;
-		AttrNum = Catalog.GetAttrNum(m_tabname);
-		recordlen = Catalog.GetRecordLength(m_tabname);
+		AttrNum = Catalog.GetAttrNum(m_tabname.c_str());
+		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
 		while(tempval && i < AttrNum)
 		{
 
-			Catalog.GetAttrInfo(m_tabname, i, tempcol);
+			Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
 			type = tempcol -> type;
 			//检查类型是否正确
 			if(type == INT && tempval -> type  == NOTCHAR)
@@ -1300,7 +1302,7 @@ void CInterpret::ExecInsert()
 					return;
 				}
 			}
-			tempval->length = Catalog.GetAttrLength(m_tabname, tempcol->colname);
+			tempval->length = Catalog.GetAttrLength(m_tabname.c_str(), tempcol->colname);
 			i++;
 			tempval = tempval -> next;
 		}
@@ -1312,26 +1314,26 @@ void CInterpret::ExecInsert()
 		//mirror
 		CRecordManager rdmanager(m_tabname);
 		recordno = rdmanager.InsertValues(m_values, recordlen);
-		Catalog.RecordNumAdd(m_tabname, 1);
+		Catalog.RecordNumAdd(m_tabname.c_str(), 1);
 		//有索引的要插入索引
-/*		tempval = m_values;
+		tempval = m_values;
 		for(i = 0 ; i < AttrNum ; i++)
 		{
-			Catalog.GetAttrInfo(m_tabname, i, tempcol);
-			if(Catalog.IsIndexCreated(m_tabname, tempcol -> colname))
+			Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
+			if(Catalog.IsIndexCreated(m_tabname.c_str(), tempcol -> colname))
 			{
-				strcpy(indexname, Catalog.GetIndexName(m_tabname, tempcol -> colname));
+				strcpy(indexname, Catalog.GetIndexName(m_tabname.c_str(), tempcol -> colname));
 				//mirror
 				CIndexManager idxmanager(indexname, m_tabname);
-				idxmanager.InsertIndex(tempval, recordno);
+				idxmanager.InsertIndex(tempval, recordno, recordlen);
 			}
 			tempval = tempval -> next;
-		}*/
+		}
 		delete tempcol;
-		printf("The record is inserted into table '%s' successful!\n", m_tabname);
+		printf("The record is inserted into table '%s' successful!\n", m_tabname.c_str());
 	}
 	else
-		printf("Table '%s' dose not exist! Please check your input!\n", m_tabname);
+		printf("Table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
 //实现SQL中的 drop table 功能 
@@ -1342,23 +1344,25 @@ void CInterpret::ExecDropTable()
 	column *tempcol;
 	char indexname[NAMELEN];
 	
-	if(Catalog.IsTableExists(m_tabname))
+	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
-		printf("Are you sure to delete table '%s'?\n",  m_tabname);
-		cout << "'y' for 'yes', 'n' for 'no'" << endl;
-		cin >> ch;
-		if(ch == 'y')
+//		printf("Are you sure to delete table '%s'?\n",  m_tabname.c_str());
+//		cout << "'y' for 'yes', 'n' for 'no'" << endl;
+//		cin >> ch;
+//		if(ch == 'y')
 		{
 			//先删索引
-			AttrNum = Catalog.GetAttrNum(m_tabname);
+			AttrNum = Catalog.GetAttrNum(m_tabname.c_str());
 			tempcol = new column;
 			for(i = 0 ; i < AttrNum ; i ++)
 			{
-				Catalog.GetAttrInfo(m_tabname, i, tempcol);
-				if(Catalog.IsIndexCreated(m_tabname, tempcol -> colname))
+				Catalog.GetAttrInfo(m_tabname.c_str(), i, tempcol);
+				if(Catalog.IsIndexCreated(m_tabname.c_str(), tempcol -> colname))
 				{
-					strcpy(indexname, Catalog.GetIndexName(m_tabname, tempcol -> colname));
+					strcpy(indexname, Catalog.GetIndexName(m_tabname.c_str(), tempcol -> colname));
 					Catalog.DeleteIndexInfo(indexname);
+					CIndexManager idxmanager(indexname, m_tabname);
+				    idxmanager.clear_idxblk();
 					strcpy(syscommand, "del ");
 					strcat(syscommand, indexname);
 					strcat(syscommand, ".idx");
@@ -1367,48 +1371,53 @@ void CInterpret::ExecDropTable()
 			}
 			delete tempcol;
 			//删表格信息
-			Catalog.DeleteTableInfo(m_tabname);
+			Catalog.DeleteTableInfo(m_tabname.c_str());
+			//清空buffer内容
+			CRecordManager rdmanager(m_tabname);
+			rdmanager.clear_tabblk();
 			//删除所有相关文件
 			strcpy(syscommand, "del ");
-			strcat(syscommand, m_tabname);
+			strcat(syscommand, m_tabname.c_str());
 			strcat(syscommand, ".map");
 			system(syscommand);
 			strcpy(syscommand, "del ");
-			strcat(syscommand, m_tabname);
+			strcat(syscommand, m_tabname.c_str());
 			strcat(syscommand, ".tab");
 			system(syscommand);
-			printf("Table '%s' has been removed successfully!\n", m_tabname);
+			printf("Table '%s' has been removed successfully!\n", m_tabname.c_str());
 		}
-		else
-			printf("The drop table operation has been cancelled!\n");
+//		else
+//			printf("The drop table operation has been cancelled!\n");
 	}
 	else
-		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
+		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
 //实现SQL中的 drop index 功能 
 void CInterpret::ExecDropIndex()
 {
 	char ch,syscommand[FILENAMELEN];
-	if(Catalog.IsIndexExists(m_indname))
+	if(Catalog.IsIndexExists(m_indname.c_str()))
 	{
-		printf("Are you sure to delete index '%s'?\n",  m_indname);
-		cout << "'y' for 'yes', 'n' for 'no'" << endl;
-		cin >> ch;
-		if(ch == 'y')
+//		printf("Are you sure to delete index '%s'?\n",  m_indname.c_str());
+//		cout << "'y' for 'yes', 'n' for 'no'" << endl;
+//		cin >> ch;
+//		if(ch == 'y')
 		{
-			Catalog.DeleteIndexInfo(m_indname);
+			Catalog.DeleteIndexInfo(m_indname.c_str());
+			CIndexManager idxmanager(m_indname, m_tabname);
+			idxmanager.clear_idxblk();
 			strcpy(syscommand, "del ");
-			strcat(syscommand, m_indname);
+			strcat(syscommand, m_indname.c_str());
 			strcat(syscommand, ".idx");
 			system(syscommand);
-			printf("Index '%s' has been removed successfully!", m_indname);
+			printf("Index '%s' has been removed successfully!\n", m_indname.c_str());
 		}
-		else
-			printf("The drop index operation has been cancelled!\n");
+//		else
+//			printf("The drop index operation has been cancelled!\n");
 	}
 	else
-		printf("Error: index '%s' dose not exist! Please check your input!\n", m_indname);
+		printf("Error: index '%s' dose not exist! Please check your input!\n", m_indname.c_str());
 
 }
 
@@ -1423,10 +1432,10 @@ void CInterpret::ExecCreateTable()
 	FILE *fp;
 	
 	//检查同名表格是否存在
-	int flag = Catalog.IsTableExists(m_tabname);
+	int flag = Catalog.IsTableExists(m_tabname.c_str());
 	if(flag)
 	{
-		printf("Table '%s' already exists!\n", m_tabname);
+		printf("Table '%s' already exists!\n", m_tabname.c_str());
 		return;
 	}
 	//检查primary key是否超过1个
@@ -1445,15 +1454,15 @@ void CInterpret::ExecCreateTable()
 		return;
 	}
 	//建table 的catalog
-	Catalog.CreateTableInfo(m_tabname, m_cols);
-	strcpy(filename, m_tabname);
+	Catalog.CreateTableInfo(m_tabname.c_str(), m_cols);
+	strcpy(filename, m_tabname.c_str());
 	strcat(filename, ".tab");
 	
 	fp = fopen(filename, "w");
 	fwrite(&count, sizeof(int), 1, fp);
 	fclose(fp);
 	
-	strcpy(filename, m_tabname);
+	strcpy(filename, m_tabname.c_str());
 	strcat(filename, ".map");
 	
 	fp = fopen(filename, "w");
@@ -1463,7 +1472,7 @@ void CInterpret::ExecCreateTable()
 	//如果有primary key,建索引
 	if(primarycol)
 	{
-		strcpy(filename,m_tabname);
+		strcpy(filename,m_tabname.c_str());
 		strcat(filename, ".idx");
 	
 		fp = fopen(filename, "w");
@@ -1472,9 +1481,9 @@ void CInterpret::ExecCreateTable()
 		fclose(fp);
 	
 		m_indname=m_tabname;
-		Catalog.CreateIndexInfo(m_indname, m_tabname, primarycol);
+		Catalog.CreateIndexInfo(m_indname.c_str(), m_tabname.c_str(), primarycol);
 	}
-	printf("Table '%s' is created successfully\n",m_tabname);
+	printf("Table '%s' is created successfully\n", m_tabname.c_str());
 }
 
 //实现SQL中的 create index 功能 
@@ -1486,48 +1495,48 @@ void CInterpret::ExecCreateIndex()
 	unsigned int recordnum;
 	int count = 1;
 
-	if(Catalog.IsTableExists(m_tabname))
+	if(Catalog.IsTableExists(m_tabname.c_str()))
 	{
 		//若属性不存在
-		if(!Catalog.IsAttrExists(m_tabname, m_cols -> colname))
+		if(!Catalog.IsAttrExists(m_tabname.c_str(), m_cols -> colname))
 		{
-			printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_cols -> colname, m_tabname);
+			printf("Error: '%s' is not an attribute of table '%s'! Please check your input!\n", m_cols -> colname, m_tabname.c_str());
 			return;
 		}
 		//若非unique属性
-		if(!Catalog.IsAttrUnique(m_tabname, m_cols -> colname))
+		if(!Catalog.IsAttrUnique(m_tabname.c_str(), m_cols -> colname))
 		{
 			printf("Error '%s' is not an unique attribute! Please check your input!\n", m_cols -> colname);
 			return;
 		}
-/*		//若该属性已建索引
-		if(Catalog.IsIndexCreated(m_tabname, m_cols -> colname))
+		//若该属性已建索引
+		if(Catalog.IsIndexCreated(m_tabname.c_str(), m_cols -> colname))
 		{
-			printf("Error: Index on attribute '%s' has already been built! Please check your input!", m_cols -> colname);
+			printf("Error: Index on attribute '%s' has already been built! Please check your input!\n", m_cols -> colname);
 			return;
 		}		
-		m_cols -> coloffset = Catalog.GetAttrOffset(m_tabname, m_cols -> colname);
-		m_cols -> collength = Catalog.GetAttrLength(m_tabname, m_cols -> colname);	
-		m_cols -> type = Catalog.GetAttrTypeByName(m_tabname, m_cols -> colname);
-		recordlen = Catalog.GetRecordLength(m_tabname);
-		recordnum = Catalog.GetRecordNumber(m_tabname);
-		strcpy(filename, m_tabname);
+		m_cols -> coloffset = Catalog.GetAttrOffset(m_tabname.c_str(), m_cols -> colname);
+		m_cols -> collength = Catalog.GetAttrLength(m_tabname.c_str(), m_cols -> colname);	
+		m_cols -> type = Catalog.GetAttrTypeByName(m_tabname.c_str(), m_cols -> colname);
+		recordlen = Catalog.GetRecordLength(m_tabname.c_str());
+		recordnum = Catalog.GetRecordNumber(m_tabname.c_str());
+		strcpy(filename, m_tabname.c_str());
 		strcat(filename, ".map");
 		fp = fopen(filename, "w");
 		fwrite(&count, sizeof(int), 1, fp);
 		fclose(fp);
-		strcpy(filename, m_indname);
+		strcpy(filename, m_indname.c_str());
 		strcat(filename, ".idx");
 		fp = fopen(filename, "w");
 		fwrite(&count, sizeof(int), 1, fp);
 		fclose(fp);
 		//mirror
 		CIndexManager idxmanager(m_indname, m_tabname);
-		idxmanager.CreateIndex(m_cols, recordlen, recordnum);
-		Catalog.CreateIndexInfo(m_indname, m_tabname, m_cols);	*/
+		idxmanager.CreateIndex(m_cols, recordlen);
+		Catalog.CreateIndexInfo(m_indname.c_str(), m_tabname.c_str(), m_cols);	
 	}
 	else
-		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname);
+		printf("Error: table '%s' dose not exist! Please check your input!\n", m_tabname.c_str());
 }
 
 //实现文件操作 
@@ -1539,9 +1548,9 @@ void CInterpret::ExecFile()
 	char c;
 	CInterpret parsetree;
 
-	if((fp = fopen(m_filename, "rb")) == NULL)
+	if((fp = fopen(m_filename.c_str(), "rb")) == NULL)
 	{
-		printf("Error: can not open file '%s'! Please check your input!\n", m_filename);
+		printf("Error: can not open file '%s'! Please check your input!\n", m_filename.c_str());
 		return;
 	}
 	while(1)

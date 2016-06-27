@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <stdlib.h>
 
 //Macro definitions
 //Buffer Manager

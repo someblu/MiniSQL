@@ -46,7 +46,7 @@ public:
 		m_name = filename;
 		m_offset_number = offset;
 	}
-	
+	void buffer_clear(string filename,short int index_table);
 protected:
 	static CBufferManager *m_ptheblocks;
 

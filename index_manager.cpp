@@ -48,6 +48,12 @@ int CIndexManager::keycompare(char *a,char *b, int tag)//a>=b 返回1
 	return -1;
 }
 
+void CIndexManager::clear_idxblk(){
+	string indexname;
+	indexname = m_indexname + ".idx";
+	buffer_clear(indexname,INDEX);
+}
+
 int CIndexManager::quick_insert(char *value,int tag,int blocknumber,int offsetinblock)//tag为比较方式
 {
 	unit_node *currentnode,*save_pointer;
@@ -222,7 +228,7 @@ int CIndexManager::CreateIndex(column *cols, unsigned int recordlen)
 		 m_ptheblocks[currentblock].used_block();;
 
 	}
-     printf("The index on attribute '%s' of table '%s' has been created successfully\n", cols->colname,m_tablename);
+     cout << "The index on attribute " << cols->colname << " of table " << m_tablename << " has been created successfully" << endl;
 	 return 1;
 }
 
@@ -459,7 +465,7 @@ int CIndexManager::SelectIndex(condition *conds, column *cols, unsigned int reco
 				col = col->next;
 			}
 			printf("\n");
-			printf("1 record(s) are selected from table '%s'!\n", m_tablename);
+			cout << "1 record(s) are selected from table " << m_tablename << "!" << endl;
 
 			m_ptheblocks[recordblock].used_block();
 			 return 1;

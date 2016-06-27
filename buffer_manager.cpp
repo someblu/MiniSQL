@@ -59,7 +59,7 @@ void CBufferManager::flush_block()
 {
 	fstream DBfile;
 	const char* file_name = m_name.c_str();
-	DBfile.open(file_name,ios::out|ios::binary);
+	DBfile.open(file_name,ios::binary|ios::out|ios::in|ios::ate);
 	if(m_is_written && m_index_table) {
 			DBfile.seekp(BLOCK_SIZE*m_offset_number,ios::beg);
 			DBfile.write(m_address,BLOCK_SIZE);
@@ -122,6 +122,19 @@ unsigned int CBufferManager::get_block(short int index_table, string filename, u
 	using_block(mark);
 	return mark;
 }
+
+void CBufferManager::buffer_clear(string filename,short int index_table){
+	int i;
+	for(i=0;i<MAX_BLOCKS;i++) {
+		if(m_ptheblocks[i].m_index_table==index_table && m_ptheblocks[i].m_name == filename ) { //表示在buffer中找到了该块
+			m_ptheblocks[i].m_index_table=0;
+			m_ptheblocks[i].m_name = "";
+			m_ptheblocks[i].m_address = NULL;
+		}
+	}
+}
+
+
 /*
 int main(){
 	CBufferManager buffer;
