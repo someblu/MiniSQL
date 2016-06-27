@@ -1,6 +1,5 @@
 //head file including
 #include "MiniSQL.h"
-//#include "stdafx.h"
 #include "index_manager.h"
 #include "buffer_manager.h"
 #include "record_manager.h"

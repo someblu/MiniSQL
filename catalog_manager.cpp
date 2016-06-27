@@ -173,39 +173,39 @@ void CCatalogManager::UpdateCatalog()
 	char buffer[100];
 	FILE* fp;
 
-	if(m_tablehead != NULL){							//Èç¹ûÎª¿Õ£¬ËµÃ÷.catÎÄ¼ş¸Õ±»readcatalog½¨Á¢ 
-														//ËùÒÔ²»ĞèÒªĞ´»Ø
+	if(m_tablehead != NULL){							//å¦‚æœä¸ºç©ºï¼Œè¯´æ˜.catæ–‡ä»¶åˆšè¢«readcatalogå»ºç«‹ 
+														//æ‰€ä»¥ä¸éœ€è¦å†™å›
 
-	TablePointer ptrTable = m_tablehead;				//±íµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
-	AttrPointer ptrAttr = ptrTable->AllAttrs;			//ÊôĞÔµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
-	IndexPointer ptrIndex = m_indexhead;				//Ë÷ÒıµÄÁ´±íµÄÒÆ¶¯Ö¸Õë
+	TablePointer ptrTable = m_tablehead;				//è¡¨çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
+	AttrPointer ptrAttr = ptrTable->AllAttrs;			//å±æ€§çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
+	IndexPointer ptrIndex = m_indexhead;				//ç´¢å¼•çš„é“¾è¡¨çš„ç§»åŠ¨æŒ‡é’ˆ
 	
-	TablePointer tempT = ptrTable;						//É¾³ı±íµÄÁ´±íÊ±
-	AttrPointer tempA = ptrAttr;						//ÓÃµ½µÄÁÙÊ±Ö¸Õë
+	TablePointer tempT = ptrTable;						//åˆ é™¤è¡¨çš„é“¾è¡¨æ—¶
+	AttrPointer tempA = ptrAttr;						//ç”¨åˆ°çš„ä¸´æ—¶æŒ‡é’ˆ
 	
-	IndexPointer temp = ptrIndex;						//É¾³ıË÷ÒıµÄÁ´±íÊ±
-														//ÓÃµ½µÄÁÙÊ±Ö¸Õë
+	IndexPointer temp = ptrIndex;						//åˆ é™¤ç´¢å¼•çš„é“¾è¡¨æ—¶
+														//ç”¨åˆ°çš„ä¸´æ—¶æŒ‡é’ˆ
 	int attrtype = 0;
 	unsigned int len = 0;
 	int tagP = 0;										
 
-	//ÏòÖ¸¶¨µÄ.catÎÄ¼şĞ´»Ø±íµÄÁ´±í
+	//å‘æŒ‡å®šçš„.catæ–‡ä»¶å†™å›è¡¨çš„é“¾è¡¨
 
-	if ((fp = fopen("tables.catlog","r")) == NULL)				//ÎÄ¼ş²»´æÔÚ
+	if ((fp = fopen("tables.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
 	{	
-		fp = fopen("tables.catlog","w");						//ĞÂ½¨ÎÄ¼ş
+		fp = fopen("tables.catlog","w");						//æ–°å»ºæ–‡ä»¶
 	}	
 	fclose(fp);
 
-	fp = fopen("tables.catlog","w");							//¿ªÊ¼Ğ´ÎÄ¼ş
+	fp = fopen("tables.catlog","w");							//å¼€å§‹å†™æ–‡ä»¶
 	
-     while(ptrTable != NULL)
+	while(ptrTable != NULL)
 	{
-		strcpy(buffer,ptrTable->TableName);				//±íµÄÃû×Ö
+		strcpy(buffer,ptrTable->TableName);				//è¡¨çš„åå­—
 		fprintf(fp,buffer);
 		fprintf(fp,"\n");
 		
-		strcpy(buffer,ptrTable->primarykey);			//±íµÄÖ÷¼ü
+		strcpy(buffer,ptrTable->primarykey);			//è¡¨çš„ä¸»é”®
 		fprintf(fp,buffer);
 	
 		fprintf(fp,"\n");
@@ -216,9 +216,9 @@ void CCatalogManager::UpdateCatalog()
 		
 		
 		ptrAttr = ptrTable ->AllAttrs;
-		while(ptrAttr != NULL)							//±í·Ç¿Õ
+		while(ptrAttr != NULL)							//è¡¨éç©º
 		{
-			strcpy(buffer,ptrAttr->AttrName);			//µÚÒ»¸öÊôĞÔµÄÃû×Ö
+			strcpy(buffer,ptrAttr->AttrName);			//ç¬¬ä¸€ä¸ªå±æ€§çš„åå­—
 			fprintf(fp,buffer);
 			fprintf(fp,"\n");
 
@@ -275,15 +275,15 @@ void CCatalogManager::UpdateCatalog()
 		tempT = ptrTable;
 	}
 
-	//ÏòÖ¸¶¨µÄ.catÎÄ¼şĞ´»ØË÷ÒıµÄÁ´±í
+	//å‘æŒ‡å®šçš„.catæ–‡ä»¶å†™å›ç´¢å¼•çš„é“¾è¡¨
 
-	if ((fp = fopen("index.catlog","r")) == NULL)				//ÎÄ¼ş²»´æÔÚ
+	if ((fp = fopen("index.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
 	{	
-		fp = fopen("index.catlog","w");						//ĞÂ½¨ÎÄ¼ş
+		fp = fopen("index.catlog","w");						//æ–°å»ºæ–‡ä»¶
 	}	
 	fclose(fp);
 
-	fp = fopen("index.catlog","w");							//¿ªÊ¼Ğ´ÎÄ¼ş
+	fp = fopen("index.catlog","w");							//å¼€å§‹å†™æ–‡ä»¶
 	
 	while(ptrIndex != NULL)
 	{
@@ -318,18 +318,18 @@ void CCatalogManager::UpdateCatalog()
 	}
 	}
 	else{
-		if ((fp = fopen("tables.catlog","r")) == NULL)				//ÎÄ¼ş²»´æÔÚ
+		if ((fp = fopen("tables.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
 		{	
-			fp = fopen("tables.catlog","w");						//ĞÂ½¨ÎÄ¼ş
+			fp = fopen("tables.catlog","w");						//æ–°å»ºæ–‡ä»¶
 		}	
 		fclose(fp);	
 		fp = fopen("tables.catlog","w");
 		fprintf(fp,"-1\n-1\n");
 		fclose(fp);	
 		
-		if ((fp = fopen("index.catlog","r")) == NULL)				//ÎÄ¼ş²»´æÔÚ
+		if ((fp = fopen("index.catlog","r")) == NULL)				//æ–‡ä»¶ä¸å­˜åœ¨
 	    {	
-		fp = fopen("index.catlog","w");						//ĞÂ½¨ÎÄ¼ş
+		fp = fopen("index.catlog","w");						//æ–°å»ºæ–‡ä»¶
 		}	
 		fclose(fp);
 		fp = fopen("index.catlog","w");	

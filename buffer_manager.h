@@ -3,13 +3,7 @@
 #pragma once
 
 #include "MiniSQL.h"
-//#define TABLE 1					//用来标记块中存的是table数据
-//#define INDEX 2					//用来标记块中存的是index数据
-//#define MAP 3					//用来标记块中存的是map数据
 
-//#define MAX_BLOCKS 1024		//buffer区内总块数
-//#define BLOCK_SIZE 8192			//每块的字节数 8KB
-//#define NAME_SIZE  100			//文件名的大小
 using namespace std;
 
 class CBufferManager
