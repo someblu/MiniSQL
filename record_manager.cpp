@@ -456,9 +456,15 @@ unsigned int CRecordManager::InsertValues(insertvalue *values, unsigned int reco
 			record_number=(map_total_block-2)*BLOCK_SIZE+1;
 	    }
 		
-		block_no=record_number/record_per_block+1;
-        offset_in_block=record_number-record_per_block*(block_no-1);
-		/////
+	int mod = record_number % record_per_block;
+	if (mod){
+		block_no = record_number / record_per_block + 1;
+		offset_in_block = record_number - record_per_block*(block_no - 1);
+	}
+	else { 
+		block_no = record_number / record_per_block;
+		offset_in_block = record_number - record_per_block*(block_no - 1);
+	}
 	    if(block_no>=tab_total_block)//需要为table文件新开一个块
 	    {
 		    char *t1; int *it1;
