@@ -52,38 +52,44 @@ int main(int argc, const char* argv[], const char* envp[])
 	short int ComEnd = 0;
 	CInterpret parsetree;
 
+	HANDLE hOut;  
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	cout << endl
-	 << "         _       __  ______  __     ______  ____    __  ___  ______   " << endl
-	 << "        | |     / / / ____/ / /    / ____/ / __ \\  /  |/  / / ____/  "  << endl
-	 << "        | | /| / / / __/   / /    / /     / / / / / /|_/ / / __/      " <<   endl
-	 << "        | |/ |/ / / /___  / /___ / /___  / /_/ / / /  / / / /___      " <<   endl
-	 << "        |__/|__/ /_____/ /_____/ \\____/  \\____/ /_/  /_/ /_____/    " << endl << endl ;
-
-	cout <<"  *************************************************************************" << endl
-	 <<"  **                         Welcom to MiniSQL!                          **" << endl
-	 <<"  **                    Copyright by                                     **" <<endl
-	 <<"  **              Chukezhen honours College 2002 Mixedclass Team         **" << endl
-	 <<"  *************************************************************************" << endl << endl;
-
+	<<	"       ¡ö    ¡ö     ¡ö   ¡ö    ¡ö   ¡ö      ¡ö¡ö      ¡ö¡ö       ¡ö             " 	<< endl 
+	<<  "      ¡ö¡ö  ¡ö¡ö    ¡ö   ¡ö¡ö  ¡ö   ¡ö    ¡ö    ¡ö  ¡ö    ¡ö     ¡ö             "	<< endl
+	<<	"     ¡ö  ¡ö¡ö  ¡ö   ¡ö   ¡ö ¡ö ¡ö   ¡ö     ¡ö¡ö     ¡ö    ¡ö     ¡ö             "	<< endl 
+	<<	"    ¡ö    ¡ö    ¡ö  ¡ö   ¡ö  ¡ö¡ö   ¡ö   ¡ö    ¡ö   ¡ö    ¡ö     ¡ö             " 	<< endl
+	<<  "    ¡ö    ¡ö    ¡ö  ¡ö   ¡ö    ¡ö   ¡ö    ¡ö¡ö¡ö     ¡ö¡ö¡ö¡ö¡ö  ¡ö¡ö¡ö¡ö       "	<< endl << endl;
+	
+	
+	
 	Catalog.ReadCatalog();
 	CBufferManager::initiate_blocks();
 	while(1)
 	{
-		strcpy(command, "");//commandæ¸…é›¶
-		ComEnd = 0;
-
+		strcpy(command, "");
+		ComEnd = 0;		
+		cout << "------------------------------------------------------------------------------------------------------------------------ " << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_INTENSITY ); 
+		cout << "query >> " << endl;
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ); 
+	
 		while(!ComEnd)
 		{
-			printf("mini>> ");
+
 			gets(input);
-//			cout << "||" << input << "||" << endl;
 			if(IsComEnd(input))
 				ComEnd = 1;
 			strcat(command, input);
 			AddSeperator(command);
 		}
 		parsetree.Parse(command);
+		SetConsoleTextAttribute(hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY ); 
+		cout << endl << "Result >> " << endl;		
+		SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ); 
 		parsetree.Execute();
+
 	}
 	return 0;
 }
